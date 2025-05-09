@@ -1,3 +1,3 @@
 # jxpert-pokedex
 
-subimos cambio s
+subo otra vez cambios para ver que me deje
