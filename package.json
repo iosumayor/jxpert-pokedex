@@ -6,14 +6,20 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint .",
     "preview": "vite preview",
     "prepare": "husky",
     "pre-commit": "lint-staged",
-    "eslint": "eslint . --fix"
+    "lint": "eslint . --fix",
+    "format": "prettier --write ."
   },
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    ".{js,jsx,ts,tsx,css,scss}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    ".{md,json}": [
+      "prettier --write"
+    ]
   },
   "engines": {
     "node": "22"

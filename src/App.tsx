@@ -76,7 +76,7 @@ export const App = () => {
 
       let regStart, regEnd;
       if (reg === "kanto") {
-        regStart = 0;
+        sregStart = 0;
         regEnd = 151;
       } else if (reg === "johto") {
         regStart = 151;
@@ -367,9 +367,8 @@ export const App = () => {
                   role="radio"
                   aria-label="Default"
                   tabIndex={0}
-                  className={`sort__pill ${
-                    sorting === "default" ? "active" : ""
-                  }`}
+                  className={`sort__pill ${sorting === "default" ? "active" : ""
+                    }`}
                   aria-checked={sorting === "default"}
                   onClick={() => {
                     setSort("default");
@@ -409,9 +408,8 @@ export const App = () => {
                   role="radio"
                   aria-label="Attack"
                   tabIndex={0}
-                  className={`sort__pill ${
-                    sorting === "attack" ? "active" : ""
-                  }`}
+                  className={`sort__pill ${sorting === "attack" ? "active" : ""
+                    }`}
                   aria-checked={sorting === "attack"}
                   onClick={() => {
                     setSort("attack");
@@ -431,9 +429,8 @@ export const App = () => {
                   role="radio"
                   aria-label="Defense"
                   tabIndex={0}
-                  className={`sort__pill ${
-                    sorting === "defense" ? "active" : ""
-                  }`}
+                  className={`sort__pill ${sorting === "defense" ? "active" : ""
+                    }`}
                   aria-checked={sorting === "defense"}
                   onClick={() => {
                     setSort("defense");
@@ -452,9 +449,8 @@ export const App = () => {
                   role="radio"
                   aria-label="Special attack"
                   tabIndex={0}
-                  className={`sort__pill ${
-                    sorting === "specialAttack" ? "active" : ""
-                  }`}
+                  className={`sort__pill ${sorting === "specialAttack" ? "active" : ""
+                    }`}
                   aria-checked={sorting === "specialAttack"}
                   onClick={() => {
                     setSort("specialAttack");
@@ -474,9 +470,8 @@ export const App = () => {
                   role="radio"
                   aria-label="Special defense"
                   tabIndex={0}
-                  className={`sort__pill ${
-                    sorting === "specialDefense" ? "active" : ""
-                  }`}
+                  className={`sort__pill ${sorting === "specialDefense" ? "active" : ""
+                    }`}
                   aria-checked={sorting === "specialDefense"}
                   onClick={() => {
                     setSort("specialDefense");
@@ -495,9 +490,8 @@ export const App = () => {
                   role="radio"
                   aria-label="Speed"
                   tabIndex={0}
-                  className={`sort__pill ${
-                    sorting === "speed" ? "active" : ""
-                  }`}
+                  className={`sort__pill ${sorting === "speed" ? "active" : ""
+                    }`}
                   aria-checked={sorting === "speed"}
                   onClick={() => {
                     setSort("speed");
