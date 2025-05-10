@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "prepare": "husky",
+    "pre-commit": "lint-staged",
     "lint": "eslint . --fix",
     "format": "prettier --write ."
   },
@@ -24,6 +25,8 @@
     "node": "22"
   },
   "dependencies": {
+    "eslint-plugin": "^1.0.1",
+    "parser": "^0.1.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.0.2"

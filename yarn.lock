@@ -1040,6 +1040,13 @@ eslint-plugin-react@^7.37.2:
     string.prototype.matchall "^4.0.12"
     string.prototype.repeat "^1.0.0"
 
+eslint-plugin@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/eslint-plugin/-/eslint-plugin-1.0.1.tgz"
+  integrity sha512-ervp8C09On0fLA258TvE08AqAr/bhRYgHVZd3BrJjD4JfOA2JGANDLGs06j51oWqfPd7Feoo3OoqHD+fuI2sFQ==
+  dependencies:
+    requireindex "~1.1.0"
+
 eslint-scope@^8.2.0:
   version "8.2.0"
   resolved "https://registry.npmjs.org/eslint-scope/-/eslint-scope-8.2.0.tgz"
@@ -1959,6 +1966,13 @@ parse-json@^5.2.0:
     json-parse-even-better-errors "^2.3.0"
     lines-and-columns "^1.1.6"
 
+parser@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.npmjs.org/parser/-/parser-0.1.4.tgz"
+  integrity sha512-f6EM/mBtPzmIh96MpcbePfhkBOYRmLYWuOukJqMysMlvjp4s2MQSSQnFEekd9GV4JGTnDJ2uFt3Ztcqc9wCMJg==
+  dependencies:
+    tokenizer "*"
+
 path-exists@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npmjs.org/path-exists/-/path-exists-4.0.0.tgz"
@@ -2104,6 +2118,11 @@ regexp.prototype.flags@^1.5.3:
     get-proto "^1.0.1"
     gopd "^1.2.0"
     set-function-name "^2.0.2"
+
+requireindex@~1.1.0:
+  version "1.1.0"
+  resolved "https://registry.npmjs.org/requireindex/-/requireindex-1.1.0.tgz"
+  integrity sha512-LBnkqsDE7BZKvqylbmn7lTIVdpx4K/QCduRATpO5R+wtPmky/a8pN1bO2D6wXppn1497AJF9mNjqAXr6bdl9jg==
 
 resolve-from@^4.0.0:
   version "4.0.0"
@@ -2435,6 +2454,11 @@ to-regex-range@^5.0.1:
   integrity sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==
   dependencies:
     is-number "^7.0.0"
+
+tokenizer@*:
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/tokenizer/-/tokenizer-0.1.0.tgz"
+  integrity sha512-AdGT3w9DLrBa767o+gXgNuEHeRUcCuKnjLv6nlkM60TAzdT0HqZuDMVBGtqIybeOA62YLLV7/7g2+DHRr1fvjQ==
 
 tslib@^2.0.3:
   version "2.8.1"
