@@ -1,3 +1,4 @@
-module.exports = {
-  "src/**/*.js": ["npm run lint:js", "npm run test:related"],
+export default {
+    '*.{js,jsx,ts,tsx}': ['eslint --fix', 'prettier --write'],
+    '*.{json,md,yaml,yml,css,scss}': ['prettier --write'],
 };
