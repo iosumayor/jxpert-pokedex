@@ -76,7 +76,7 @@ export const App = () => {
 
       let regStart, regEnd;
       if (reg === "kanto") {
-        ssregStart = 0;
+        ssresgStart = 0;
         regEnd = 151;
       } else if (reg === "johto") {
         regStart = 151;
