@@ -13,9 +13,13 @@
     "format": "prettier --write ."
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx,js,jsx}": [
+    ".{js,jsx,ts,tsx,css,scss}": [
       "eslint --fix",
+      "prettier --write",
       "git add"
+    ],
+    ".{md,json}": [
+      "prettier --write"
     ]
   },
   "engines": {
