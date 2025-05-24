@@ -72,7 +72,7 @@ const mockPokemonDetailCharmanderResponse = {
     },
   },
   stats: [
-    { base_stat: 0, stat: { name: "hp" } },
+    { base_stat: 100, stat: { name: "hp" } },
     { base_stat: 49, stat: { name: "attack" } },
     { base_stat: 50, stat: { name: "defense" } },
     { base_stat: 65, stat: { name: "special-attack" } },
@@ -232,7 +232,7 @@ describe("App Component", () => {
 
   })
 
- describe("muestra la informacio de varios pokemon",() => {
+ describe("muestra la información de varios pokemon",() => {
 
   test("deberia renderizar varios pokemon cuando se cargan los datos", async () => {
     const mockFetch = vi.fn();
@@ -291,7 +291,7 @@ describe("App Component", () => {
     expect(bulbasaurName).toBeInTheDocument();
   });
 
-  test("no debería aparecer el pokemon que se busque por nombre en el filtro", async () => {
+  test("no debería aparecer el pokemon cuyo nombre no coincida con la busqueda", async () => {
     const mockFetch = vi.fn();
     global.fetch = mockFetch;
 
