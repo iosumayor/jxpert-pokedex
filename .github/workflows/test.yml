@@ -16,8 +16,6 @@ jobs:
 
       - name: Setup Node
         uses: actions/checkout@v3
-        with:
-          node-version: 22
 
       - name: Install Dependecias
         run: yarn install
