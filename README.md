@@ -12,10 +12,4 @@ se cambia para subir a masterdcsdcsdcds
 estos cambios habra que borrarlos
 ////
 
-fujvjvj
-
-cambios para GitHub Actions Tutorial | Run Automated Tests
-dfdsfdsfsdfssdfdfvdfserfreg
-añade ignore-engines tambien en el test
-
-cambios de yarnregerev
+añade run build en test.yml
