@@ -20,6 +20,6 @@ jobs:
           node-version: 22
 
       - name: Install Dependecias
-        run: yarn install --frozen-lockfile
+        run: yarn install
       - name: Run tests
         run: yarn test
