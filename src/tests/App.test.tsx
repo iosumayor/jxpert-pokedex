@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import '@testing-library/jest-dom'
+import userEvent, { UserEvent } from "@testing-library/user-event";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { App } from "../App";
 
@@ -259,6 +260,64 @@ describe("App Component", () => {
 
     expect(bulbasaur).toBeInTheDocument();
     expect(charmander).toBeInTheDocument();
+  });
+
+  test("debería aparecer el pokemon que se busque por nombre en el filtro", async () => {
+    const mockFetch = vi.fn();
+    global.fetch = mockFetch;
+
+    mockFetch
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockKantoPokemonListResponse,
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockPokemonDetailBulbasaurResponse,
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockPokemonDetailCharmanderResponse,
+      });
+
+    render(<App />);
+
+    const searchPokemonPlaceholer = await screen.getByPlaceholderText('Search a Pokémon...')
+    await userEvent.type(searchPokemonPlaceholer,"bulbasaur")
+    const bulbasaurName = screen.getByText("bulbasaur");
+
+    
+
+    expect(bulbasaurName).toBeInTheDocument();
+  });
+
+  test("no debería aparecer el pokemon que se busque por nombre en el filtro", async () => {
+    const mockFetch = vi.fn();
+    global.fetch = mockFetch;
+
+    mockFetch
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockKantoPokemonListResponse,
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockPokemonDetailBulbasaurResponse,
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockPokemonDetailCharmanderResponse,
+      });
+
+    render(<App />);
+
+    const searchPokemonPlaceholer = await screen.getByPlaceholderText('Search a Pokémon...')
+    await userEvent.type(searchPokemonPlaceholer,"bulbasaur")
+    const charmanderrName = screen.queryByText("charmander");
+
+    
+
+    expect(charmanderrName).not.toBeInTheDocument();
   });
  })
 });
