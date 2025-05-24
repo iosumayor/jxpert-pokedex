@@ -61,7 +61,7 @@ describe("App Component", () => {
 
     render(<App />);
 
-    const name = await screen.findByText("bulbasaurdsfsdsd");
+    const name = await screen.findByText("bulbasaur");
 
     expect(name).toBeInTheDocument();
   });
