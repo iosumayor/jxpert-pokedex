@@ -86,7 +86,7 @@ describe("App Component", () => {
     vi.clearAllMocks();
   });
   describe("Muestra la informacion de un pokemon", () => {
-    test("deberia renderizar el nombre del pokemon cuando se cargan los datos", async () => {
+    beforeEach(()=> {
       const mockFetch = vi.fn();
       global.fetch = mockFetch;
   
@@ -99,6 +99,8 @@ describe("App Component", () => {
           ok: true,
           json: async () => mockPokemonDetailBulbasaurResponse,
         });
+    })
+    test("deberia renderizar el nombre del pokemon cuando se cargan los datos", async () => {
   
       render(<App />);
   
@@ -109,18 +111,6 @@ describe("App Component", () => {
     });
   
     test("deberia renderizar el attack del pokemon cuando se cargan los datos", async () => {
-      const mockFetch = vi.fn();
-      global.fetch = mockFetch;
-  
-      mockFetch
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => mockOnePokemonListResponse,
-        })
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => mockPokemonDetailBulbasaurResponse,
-        });
   
       render(<App />);
       const hpPokemon = await screen.findByText('0');
@@ -129,18 +119,6 @@ describe("App Component", () => {
       expect(hpPokemon).toBeInTheDocument();
     });
     test("deberia renderizar el attack del pokemon cuando se cargan los datos", async () => {
-      const mockFetch = vi.fn();
-      global.fetch = mockFetch;
-  
-      mockFetch
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => mockOnePokemonListResponse,
-        })
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => mockPokemonDetailBulbasaurResponse,
-        });
   
       render(<App />);
       const attackPokemon = await screen.findByText('49');
@@ -149,18 +127,7 @@ describe("App Component", () => {
       expect(attackPokemon).toBeInTheDocument();
     });
     test("deberia renderizar la defensa del pokemon cuando se cargan los datos", async () => {
-      const mockFetch = vi.fn();
-      global.fetch = mockFetch;
-  
-      mockFetch
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => mockOnePokemonListResponse,
-        })
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => mockPokemonDetailBulbasaurResponse,
-        });
+
   
       render(<App />);
       const defensePokemon = await screen.findByText('50');
@@ -169,18 +136,6 @@ describe("App Component", () => {
       expect(defensePokemon).toBeInTheDocument();
     });
     test("deberia renderizar el ataque especial del pokemon cuando se cargan los datos", async () => {
-      const mockFetch = vi.fn();
-      global.fetch = mockFetch;
-  
-      mockFetch
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => mockOnePokemonListResponse,
-        })
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => mockPokemonDetailBulbasaurResponse,
-        });
   
       render(<App />);
       const specialAttackPokemon = await screen.findByText('65');
@@ -189,18 +144,6 @@ describe("App Component", () => {
       expect(specialAttackPokemon).toBeInTheDocument();
     });
     test("deberia renderizar la defensa especial del pokemon cuando se cargan los datos", async () => {
-      const mockFetch = vi.fn();
-      global.fetch = mockFetch;
-  
-      mockFetch
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => mockOnePokemonListResponse,
-        })
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => mockPokemonDetailBulbasaurResponse,
-        });
   
       render(<App />);
       const specialDefensePokemon = await screen.findByText('66');
@@ -209,18 +152,7 @@ describe("App Component", () => {
       expect(specialDefensePokemon).toBeInTheDocument();
     });
     test("deberia renderizar la imagen del pokemon cuando se cargan los datos", async () => {
-      const mockFetch = vi.fn();
-      global.fetch = mockFetch;
-  
-      mockFetch
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => mockOnePokemonListResponse,
-        })
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => mockPokemonDetailBulbasaurResponse,
-        });
+
   
       render(<App />);
       const image = await screen.findByAltText('bulbasaur artwork');
@@ -233,24 +165,25 @@ describe("App Component", () => {
   })
 
  describe("muestra la información de varios pokemon",() => {
-
-  test("deberia renderizar varios pokemon cuando se cargan los datos", async () => {
+  beforeEach(()=>{
     const mockFetch = vi.fn();
     global.fetch = mockFetch;
-
     mockFetch
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockKantoPokemonListResponse,
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockPokemonDetailBulbasaurResponse,
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockPokemonDetailCharmanderResponse,
-      });
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockKantoPokemonListResponse,
+    })
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockPokemonDetailBulbasaurResponse,
+    })
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockPokemonDetailCharmanderResponse,
+    });
+  })
+
+  test("deberia renderizar varios pokemon cuando se cargan los datos", async () => {
 
     render(<App />);
     const bulbasaur = await screen.findByText('bulbasaur');
@@ -263,22 +196,6 @@ describe("App Component", () => {
   });
 
   test("debería aparecer el pokemon que se busque por nombre en el filtro", async () => {
-    const mockFetch = vi.fn();
-    global.fetch = mockFetch;
-
-    mockFetch
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockKantoPokemonListResponse,
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockPokemonDetailBulbasaurResponse,
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockPokemonDetailCharmanderResponse,
-      });
 
     render(<App />);
 
@@ -292,22 +209,6 @@ describe("App Component", () => {
   });
 
   test("no debería aparecer el pokemon cuyo nombre no coincida con la busqueda", async () => {
-    const mockFetch = vi.fn();
-    global.fetch = mockFetch;
-
-    mockFetch
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockKantoPokemonListResponse,
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockPokemonDetailBulbasaurResponse,
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockPokemonDetailCharmanderResponse,
-      });
 
     render(<App />);
 
@@ -316,6 +217,17 @@ describe("App Component", () => {
     const charmanderrName = screen.queryByText("charmander");
 
     
+
+    expect(charmanderrName).not.toBeInTheDocument();
+  });
+
+  test("no debería aparecer el pokemon cuyo nombre no coincida con la busqueda", async () => {
+
+    render(<App />);
+
+    const searchPokemonPlaceholer = await screen.getByPlaceholderText('Search a Pokémon...')
+    await userEvent.type(searchPokemonPlaceholer,"bulbasaur")
+    const charmanderrName = screen.queryByText("charmander");
 
     expect(charmanderrName).not.toBeInTheDocument();
   });
