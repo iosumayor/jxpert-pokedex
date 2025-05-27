@@ -73,9 +73,9 @@ const mockPokemonDetailCharmanderResponse = {
   },
   stats: [
     { base_stat: 100, stat: { name: "hp" } },
-    { base_stat: 49, stat: { name: "attack" } },
-    { base_stat: 50, stat: { name: "defense" } },
-    { base_stat: 65, stat: { name: "special-attack" } },
+    { base_stat: 60, stat: { name: "attack" } },
+    { base_stat: 20, stat: { name: "defense" } },
+    { base_stat: 67, stat: { name: "special-attack" } },
     { base_stat: 66, stat: { name: "special-defense" } },
     { base_stat: 45, stat: { name: "speed" } },
   ],
@@ -218,6 +218,51 @@ describe("App Component", () => {
       await userEvent.click(buttonSort[1]);
       const hpElements = screen.getAllByLabelText("Health points");
       await userEvent.click(hpElements[0]);
+
+      const charmander = screen.getByText("charmander");
+      const bulbasaur = screen.getByText("bulbasaur");
+      expect(charmander.compareDocumentPosition(bulbasaur)).toBe(
+        DOCUMENT_POSITION_FOLLOWING,
+      );
+    });
+    test("al clicar el boton de ordenar por attack debe aparecer el Pokemon con más attack primero", async () => {
+      render(<App />);
+      // DOCUMENT_POSITION_FOLLOWING será 4 si el primer elemento aparece antes en el DOM que el segundo comparado con .compareDocumentPosition()
+      const DOCUMENT_POSITION_FOLLOWING = 4;
+      const buttonSort = screen.getAllByRole("combobox");
+      await userEvent.click(buttonSort[1]);
+      const attackElements = screen.getAllByLabelText("Attack");
+      await userEvent.click(attackElements[0]);
+
+      const charmander = screen.getByText("charmander");
+      const bulbasaur = screen.getByText("bulbasaur");
+      expect(charmander.compareDocumentPosition(bulbasaur)).toBe(
+        DOCUMENT_POSITION_FOLLOWING,
+      );
+    });
+    test("al clicar el boton de ordenar por defensa debe aparecer el Pokemon con más defensa primero", async () => {
+      render(<App />);
+      // DOCUMENT_POSITION_FOLLOWING será 4 si el primer elemento aparece antes en el DOM que el segundo comparado con .compareDocumentPosition()
+      const DOCUMENT_POSITION_FOLLOWING = 4;
+      const buttonSort = screen.getAllByRole("combobox");
+      await userEvent.click(buttonSort[1]);
+      const defenseElements = screen.getAllByLabelText("Defense");
+      await userEvent.click(defenseElements[0]);
+
+      const charmander = screen.getByText("charmander");
+      const bulbasaur = screen.getByText("bulbasaur");
+      expect(bulbasaur.compareDocumentPosition(charmander)).toBe(
+        DOCUMENT_POSITION_FOLLOWING,
+      );
+    });
+    test("al clicar el boton de ordenar por special attack debe aparecer el Pokemon con más special attack primero", async () => {
+      render(<App />);
+      // DOCUMENT_POSITION_FOLLOWING será 4 si el primer elemento aparece antes en el DOM que el segundo comparado con .compareDocumentPosition()
+      const DOCUMENT_POSITION_FOLLOWING = 4;
+      const buttonSort = screen.getAllByRole("combobox");
+      await userEvent.click(buttonSort[1]);
+      const saElements = screen.getAllByLabelText("Special attack");
+      await userEvent.click(saElements[0]);
 
       const charmander = screen.getByText("charmander");
       const bulbasaur = screen.getByText("bulbasaur");
