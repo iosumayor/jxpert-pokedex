@@ -1,6 +1,6 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import userEvent, { UserEvent } from "@testing-library/user-event";
+import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { App } from "../App";
 
@@ -214,6 +214,31 @@ describe("App Component", () => {
       // render(<App />);
       // const buttonSort = screen.getByRole("combobox")
       // expect(buttonSort).toBeInTheDocument()
+    });
+  });
+
+  describe("Carga la barra de búsqueda", () => {
+    test("al clicar el desplegable debe aparecer el listado de botones", async () => {
+      render(<App />);
+      const buttonSort = screen.getAllByRole("combobox");
+      await userEvent.click(buttonSort[1]);
+      console.log(screen.debug());
+      const sortText = screen.getByText("Default");
+
+      expect(sortText).toBeInTheDocument();
+    });
+
+    test("al clicar una región debe aparecer en la barra de búsqueda", async () => {
+      render(<App />);
+      const regionExpanded = screen.getAllByRole("combobox");
+      await userEvent.click(regionExpanded[0]);
+      const regionButton = screen.getByText("johto");
+      await userEvent.click(regionButton);
+
+      // console.log(screen.debug());
+      const sortText = screen.getByRole("radio");
+
+      expect(sortText[1]).toHaveClass("active");
     });
   });
 });
