@@ -210,10 +210,20 @@ describe("App Component", () => {
 
       expect(charmanderrName).not.toBeInTheDocument();
     });
-    test("no debería aparecer el pokemon cuyo nombre no coincida con la busqueda", async () => {
-      // render(<App />);
-      // const buttonSort = screen.getByRole("combobox")
-      // expect(buttonSort).toBeInTheDocument()
+    test("al clicar el boton de ordenar por hp debe aparecer el Pokemon con más hp primero", async () => {
+      render(<App />);
+      // DOCUMENT_POSITION_FOLLOWING será 4 si el primer elemento aparece antes en el DOM que el segundo comparado con .compareDocumentPosition()
+      const DOCUMENT_POSITION_FOLLOWING = 4;
+      const buttonSort = screen.getAllByRole("combobox");
+      await userEvent.click(buttonSort[1]);
+      const hpElements = screen.getAllByLabelText("Health points");
+      await userEvent.click(hpElements[0]);
+
+      const charmander = screen.getByText("charmander");
+      const bulbasaur = screen.getByText("bulbasaur");
+      expect(charmander.compareDocumentPosition(bulbasaur)).toBe(
+        DOCUMENT_POSITION_FOLLOWING,
+      );
     });
   });
 
@@ -222,7 +232,6 @@ describe("App Component", () => {
       render(<App />);
       const buttonSort = screen.getAllByRole("combobox");
       await userEvent.click(buttonSort[1]);
-      console.log(screen.debug());
       const sortText = screen.getByText("Default");
 
       expect(sortText).toBeInTheDocument();
