@@ -26,6 +26,26 @@ const mockKantoPokemonListResponse = {
     },
   ],
 };
+const mockJohtoPokemonListResponse = {
+  results: [
+    {
+      name: "chikorita",
+      url: "https://pokeapi.co/api/v2/pokemon/152/",
+    },
+    {
+      name: "totodile",
+      url: "https://pokeapi.co/api/v2/pokemon/158/",
+    },
+  ],
+};
+const mockHoennPokemonListResponse = {
+  results: [
+    {
+      name: "groudon",
+      url: "https://pokeapi.co/api/v2/pokemon/383/",
+    },
+  ],
+};
 
 // Respuesta del detalle
 const mockPokemonDetailBulbasaurResponse = {
@@ -77,6 +97,84 @@ const mockPokemonDetailCharmanderResponse = {
     { base_stat: 20, stat: { name: "defense" } },
     { base_stat: 67, stat: { name: "special-attack" } },
     { base_stat: 80, stat: { name: "special-defense" } },
+    { base_stat: 55, stat: { name: "speed" } },
+  ],
+};
+const mockPokemonDetailChikoritaResponse = {
+  id: 152,
+  name: "chikorita",
+  types: [
+    {
+      type: {
+        name: "grass",
+      },
+    },
+  ],
+  sprites: {
+    other: {
+      "official-artwork": {
+        front_default: "https://example.com/chikorita.png",
+      },
+    },
+  },
+  stats: [
+    { base_stat: 100, stat: { name: "hp" } },
+    { base_stat: 60, stat: { name: "attack" } },
+    { base_stat: 20, stat: { name: "defense" } },
+    { base_stat: 67, stat: { name: "special-attack" } },
+    { base_stat: 80, stat: { name: "special-defense" } },
+    { base_stat: 55, stat: { name: "speed" } },
+  ],
+};
+const mockPokemonDetailTotodileResponse = {
+  id: 158,
+  name: "totodile",
+  types: [
+    {
+      type: {
+        name: "water",
+      },
+    },
+  ],
+  sprites: {
+    other: {
+      "official-artwork": {
+        front_default: "https://example.com/totodile.png",
+      },
+    },
+  },
+  stats: [
+    { base_stat: 100, stat: { name: "hp" } },
+    { base_stat: 60, stat: { name: "attack" } },
+    { base_stat: 20, stat: { name: "defense" } },
+    { base_stat: 67, stat: { name: "special-attack" } },
+    { base_stat: 80, stat: { name: "special-defense" } },
+    { base_stat: 55, stat: { name: "speed" } },
+  ],
+};
+const mockPokemonDetailGroudonResponse = {
+  id: 383,
+  name: "groudon",
+  types: [
+    {
+      type: {
+        name: "ground",
+      },
+    },
+  ],
+  sprites: {
+    other: {
+      "official-artwork": {
+        front_default: "https://example.com/groudon.png",
+      },
+    },
+  },
+  stats: [
+    { base_stat: 100, stat: { name: "hp" } },
+    { base_stat: 90, stat: { name: "attack" } },
+    { base_stat: 70, stat: { name: "defense" } },
+    { base_stat: 67, stat: { name: "special-attack" } },
+    { base_stat: 87, stat: { name: "special-defense" } },
     { base_stat: 55, stat: { name: "speed" } },
   ],
 };
@@ -345,7 +443,7 @@ describe("App Component", () => {
         })
         .mockResolvedValueOnce({
           ok: true,
-          json: async () => mockPokemonDetailBulbasaurResponse,
+          json: async () => mockPokemonDetailCharmanderResponse,
         });
       render(<App />);
       const regionExpanded = screen.getAllByRole("combobox");
@@ -357,6 +455,116 @@ describe("App Component", () => {
       const sortText = screen.getAllByText("johto");
 
       expect(sortText[1]).toHaveClass("active");
+    });
+  });
+
+  describe("Clicar otra región", () => {
+    test("deben aparecer los pokemons de la nueva región", async () => {
+      const mockFetch = vi.fn();
+      global.fetch = mockFetch;
+
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockOnePokemonListResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockPokemonDetailBulbasaurResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockJohtoPokemonListResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockPokemonDetailChikoritaResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockPokemonDetailTotodileResponse,
+        });
+      render(<App />);
+      const regionExpanded = screen.getAllByRole("combobox");
+      await userEvent.click(regionExpanded[0]);
+      const regionButton = screen.getByText("johto");
+      await userEvent.click(regionButton);
+
+      const chikorita = screen.getByText("chikorita");
+      const totodile = screen.getByText("totodile");
+
+      console.log(screen.debug());
+      expect(chikorita).toBeInTheDocument();
+      expect(totodile).toBeInTheDocument();
+    });
+
+    test("no deben aparecer los pokemons de la antigua región", async () => {
+      const mockFetch = vi.fn();
+      global.fetch = mockFetch;
+
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockOnePokemonListResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockPokemonDetailBulbasaurResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockJohtoPokemonListResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockPokemonDetailChikoritaResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockPokemonDetailTotodileResponse,
+        });
+      render(<App />);
+      const regionExpanded = screen.getAllByRole("combobox");
+      await userEvent.click(regionExpanded[0]);
+      const regionButton = screen.getByText("johto");
+      await userEvent.click(regionButton);
+
+      const bulbasaur = screen.queryByText("bulbasaur");
+
+      expect(bulbasaur).not.toBeInTheDocument();
+    });
+
+    test("deben aparecer los pokemons de la nueva región de Hoenn", async () => {
+      const mockFetch = vi.fn();
+      global.fetch = mockFetch;
+
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockOnePokemonListResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockPokemonDetailBulbasaurResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockHoennPokemonListResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockPokemonDetailGroudonResponse,
+        });
+      render(<App />);
+      const regionExpanded = screen.getAllByRole("combobox");
+      await userEvent.click(regionExpanded[0]);
+      const regionButton = screen.getByText("hoenn");
+      await userEvent.click(regionButton);
+
+      const groudon = screen.getByText("groudon");
+
+      console.log(screen.debug());
+      expect(groudon).toBeInTheDocument();
     });
   });
 });
