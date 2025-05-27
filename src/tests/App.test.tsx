@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/react";
-import '@testing-library/jest-dom'
+import "@testing-library/jest-dom";
 import userEvent, { UserEvent } from "@testing-library/user-event";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { App } from "../App";
@@ -10,7 +10,7 @@ const mockOnePokemonListResponse = {
     {
       name: "bulbasaur",
       url: "https://pokeapi.co/api/v2/pokemon/1/",
-    }
+    },
   ],
 };
 
@@ -22,8 +22,8 @@ const mockKantoPokemonListResponse = {
     },
     {
       name: "charmander",
-      url: "https://pokeapi.co/api/v2/pokemon/4/"
-    }
+      url: "https://pokeapi.co/api/v2/pokemon/4/",
+    },
   ],
 };
 
@@ -86,10 +86,10 @@ describe("App Component", () => {
     vi.clearAllMocks();
   });
   describe("Muestra la informacion de un pokemon", () => {
-    beforeEach(()=> {
+    beforeEach(() => {
       const mockFetch = vi.fn();
       global.fetch = mockFetch;
-  
+
       mockFetch
         .mockResolvedValueOnce({
           ok: true,
@@ -99,137 +99,121 @@ describe("App Component", () => {
           ok: true,
           json: async () => mockPokemonDetailBulbasaurResponse,
         });
-    })
+    });
     test("deberia renderizar el nombre del pokemon cuando se cargan los datos", async () => {
-  
       render(<App />);
-  
+
       const name = await screen.findByText("bulbasaur");
-      console.log(screen.debug())
-  
+      console.log(screen.debug());
+
       expect(name).toBeInTheDocument();
     });
-  
+
     test("deberia renderizar el attack del pokemon cuando se cargan los datos", async () => {
-  
       render(<App />);
-      const hpPokemon = await screen.findByText('0');
-      
-  
+      const hpPokemon = await screen.findByText("0");
+
       expect(hpPokemon).toBeInTheDocument();
     });
     test("deberia renderizar el attack del pokemon cuando se cargan los datos", async () => {
-  
       render(<App />);
-      const attackPokemon = await screen.findByText('49');
-      
-  
+      const attackPokemon = await screen.findByText("49");
+
       expect(attackPokemon).toBeInTheDocument();
     });
     test("deberia renderizar la defensa del pokemon cuando se cargan los datos", async () => {
-
-  
       render(<App />);
-      const defensePokemon = await screen.findByText('50');
-      
-  
+      const defensePokemon = await screen.findByText("50");
+
       expect(defensePokemon).toBeInTheDocument();
     });
     test("deberia renderizar el ataque especial del pokemon cuando se cargan los datos", async () => {
-  
       render(<App />);
-      const specialAttackPokemon = await screen.findByText('65');
-      
-  
+      const specialAttackPokemon = await screen.findByText("65");
+
       expect(specialAttackPokemon).toBeInTheDocument();
     });
     test("deberia renderizar la defensa especial del pokemon cuando se cargan los datos", async () => {
-  
       render(<App />);
-      const specialDefensePokemon = await screen.findByText('66');
-      
-  
+      const specialDefensePokemon = await screen.findByText("66");
+
       expect(specialDefensePokemon).toBeInTheDocument();
     });
     test("deberia renderizar la imagen del pokemon cuando se cargan los datos", async () => {
-
-  
       render(<App />);
-      const image = await screen.findByAltText('bulbasaur artwork');
-  
-      
-  
-      expect(image).toHaveAttribute('src','https://example.com/bulbasaur.png');
+      const image = await screen.findByAltText("bulbasaur artwork");
+
+      expect(image).toHaveAttribute("src", "https://example.com/bulbasaur.png");
+    });
+  });
+
+  describe("muestra la información de varios pokemon", () => {
+    beforeEach(() => {
+      const mockFetch = vi.fn();
+      global.fetch = mockFetch;
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockKantoPokemonListResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockPokemonDetailBulbasaurResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockPokemonDetailCharmanderResponse,
+        });
     });
 
-  })
+    test("deberia renderizar varios pokemon cuando se cargan los datos", async () => {
+      render(<App />);
+      const bulbasaur = await screen.findByText("bulbasaur");
+      const charmander = await screen.findByText("charmander");
 
- describe("muestra la información de varios pokemon",() => {
-  beforeEach(()=>{
-    const mockFetch = vi.fn();
-    global.fetch = mockFetch;
-    mockFetch
-    .mockResolvedValueOnce({
-      ok: true,
-      json: async () => mockKantoPokemonListResponse,
-    })
-    .mockResolvedValueOnce({
-      ok: true,
-      json: async () => mockPokemonDetailBulbasaurResponse,
-    })
-    .mockResolvedValueOnce({
-      ok: true,
-      json: async () => mockPokemonDetailCharmanderResponse,
+      expect(bulbasaur).toBeInTheDocument();
+      expect(charmander).toBeInTheDocument();
     });
-  })
 
-  test("deberia renderizar varios pokemon cuando se cargan los datos", async () => {
+    test("debería aparecer el pokemon que se busque por nombre en el filtro", async () => {
+      render(<App />);
 
-    render(<App />);
-    const bulbasaur = await screen.findByText('bulbasaur');
-    const charmander = await screen.findByText('charmander');
+      const searchPokemonPlaceholer = await screen.getByPlaceholderText(
+        "Search a Pokémon...",
+      );
+      await userEvent.type(searchPokemonPlaceholer, "bulbasaur");
+      const bulbasaurName = screen.getByText("bulbasaur");
 
-    
+      expect(bulbasaurName).toBeInTheDocument();
+    });
 
-    expect(bulbasaur).toBeInTheDocument();
-    expect(charmander).toBeInTheDocument();
+    test("no debería aparecer el pokemon cuyo nombre no coincida con la busqueda", async () => {
+      render(<App />);
+
+      const searchPokemonPlaceholer = await screen.getByPlaceholderText(
+        "Search a Pokémon...",
+      );
+      await userEvent.type(searchPokemonPlaceholer, "bulbasaur");
+      const charmanderrName = screen.queryByText("charmander");
+
+      expect(charmanderrName).not.toBeInTheDocument();
+    });
+
+    test("no debería aparecer el pokemon cuyo nombre no coincida con la busqueda", async () => {
+      render(<App />);
+
+      const searchPokemonPlaceholer = await screen.getByPlaceholderText(
+        "Search a Pokémon...",
+      );
+      await userEvent.type(searchPokemonPlaceholer, "bulbasaur");
+      const charmanderrName = screen.queryByText("charmander");
+
+      expect(charmanderrName).not.toBeInTheDocument();
+    });
+    test("no debería aparecer el pokemon cuyo nombre no coincida con la busqueda", async () => {
+      // render(<App />);
+      // const buttonSort = screen.getByRole("combobox")
+      // expect(buttonSort).toBeInTheDocument()
+    });
   });
-
-  test("debería aparecer el pokemon que se busque por nombre en el filtro", async () => {
-
-    render(<App />);
-
-    const searchPokemonPlaceholer = await screen.getByPlaceholderText('Search a Pokémon...')
-    await userEvent.type(searchPokemonPlaceholer,"bulbasaur")
-    const bulbasaurName = screen.getByText("bulbasaur");
-
-    
-
-    expect(bulbasaurName).toBeInTheDocument();
-  });
-
-  test("no debería aparecer el pokemon cuyo nombre no coincida con la busqueda", async () => {
-
-    render(<App />);
-
-    const searchPokemonPlaceholer = await screen.getByPlaceholderText('Search a Pokémon...')
-    await userEvent.type(searchPokemonPlaceholer,"bulbasaur")
-    const charmanderrName = screen.queryByText("charmander");
-
-    
-
-    expect(charmanderrName).not.toBeInTheDocument();
-  });
-
-  test("no debería aparecer el pokemon cuyo nombre no coincida con la busqueda", async () => {
-
-    render(<App />);
-
-    const searchPokemonPlaceholer = await screen.getByPlaceholderText('Search a Pokémon...')
-    await userEvent.type(searchPokemonPlaceholer,"bulbasaur")
-    const charmanderrName = screen.queryByText("charmander");
-
-    expect(charmanderrName).not.toBeInTheDocument();
-  });
- })
 });
