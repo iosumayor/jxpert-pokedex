@@ -229,6 +229,18 @@ describe("App Component", () => {
 
   describe("Carga la barra de búsqueda", () => {
     test("al clicar el desplegable debe aparecer el listado de botones", async () => {
+      const mockFetch = vi.fn();
+      global.fetch = mockFetch;
+
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockOnePokemonListResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockPokemonDetailBulbasaurResponse,
+        });
       render(<App />);
       const buttonSort = screen.getAllByRole("combobox");
       await userEvent.click(buttonSort[1]);
@@ -238,6 +250,26 @@ describe("App Component", () => {
     });
 
     test("al clicar una región debe aparecer en la barra de búsqueda", async () => {
+      const mockFetch = vi.fn();
+      global.fetch = mockFetch;
+
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockOnePokemonListResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockPokemonDetailBulbasaurResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockOnePokemonListResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockPokemonDetailBulbasaurResponse,
+        });
       render(<App />);
       const regionExpanded = screen.getAllByRole("combobox");
       await userEvent.click(regionExpanded[0]);
@@ -245,7 +277,7 @@ describe("App Component", () => {
       await userEvent.click(regionButton);
 
       // console.log(screen.debug());
-      const sortText = screen.getByRole("radio");
+      const sortText = screen.getAllByText("johto");
 
       expect(sortText[1]).toHaveClass("active");
     });
