@@ -202,7 +202,6 @@ describe("App Component", () => {
       render(<App />);
 
       const name = await screen.findByText("bulbasaur");
-      console.log(screen.debug());
 
       expect(name).toBeInTheDocument();
     });
@@ -451,7 +450,6 @@ describe("App Component", () => {
       const regionButton = screen.getByText("johto");
       await userEvent.click(regionButton);
 
-      // console.log(screen.debug());
       const sortText = screen.getAllByText("johto");
 
       expect(sortText[1]).toHaveClass("active");
@@ -493,7 +491,6 @@ describe("App Component", () => {
       const chikorita = screen.getByText("chikorita");
       const totodile = screen.getByText("totodile");
 
-      console.log(screen.debug());
       expect(chikorita).toBeInTheDocument();
       expect(totodile).toBeInTheDocument();
     });
@@ -563,7 +560,6 @@ describe("App Component", () => {
 
       const groudon = screen.getByText("groudon");
 
-      console.log(screen.debug());
       expect(groudon).toBeInTheDocument();
     });
   });
