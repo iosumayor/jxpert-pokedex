@@ -24,7 +24,7 @@ describe("App Component", () => {
   describe("Muestra la informacion de un pokemon", () => {
     beforeEach(() => {
       const mockFetch = vi.fn();
-      global.fetch = mockFetch;
+      globalThis.fetch = mockFetch;
 
       mockFetch
         .mockResolvedValueOnce({
@@ -85,7 +85,7 @@ describe("App Component", () => {
   describe("muestra la información de varios pokemon", () => {
     beforeEach(() => {
       const mockFetch = vi.fn();
-      global.fetch = mockFetch;
+      globalThis.fetch = mockFetch;
       mockFetch
         .mockResolvedValueOnce({
           ok: true,
@@ -242,7 +242,7 @@ describe("App Component", () => {
   describe("Carga la barra de búsqueda", () => {
     test("al clicar el desplegable debe aparecer el listado de botones", async () => {
       const mockFetch = vi.fn();
-      global.fetch = mockFetch;
+      globalThis.fetch = mockFetch;
 
       mockFetch
         .mockResolvedValueOnce({
@@ -263,7 +263,7 @@ describe("App Component", () => {
 
     test("al clicar una región debe aparecer en la barra de búsqueda", async () => {
       const mockFetch = vi.fn();
-      global.fetch = mockFetch;
+      globalThis.fetch = mockFetch;
 
       mockFetch
         .mockResolvedValueOnce({
@@ -297,7 +297,7 @@ describe("App Component", () => {
   describe("Clicar otra región", () => {
     test("deben aparecer los pokemons de la nueva región", async () => {
       const mockFetch = vi.fn();
-      global.fetch = mockFetch;
+      globalThis.fetch = mockFetch;
 
       mockFetch
         .mockResolvedValueOnce({
@@ -335,7 +335,7 @@ describe("App Component", () => {
 
     test("no deben aparecer los pokemons de la antigua región", async () => {
       const mockFetch = vi.fn();
-      global.fetch = mockFetch;
+      globalThis.fetch = mockFetch;
 
       mockFetch
         .mockResolvedValueOnce({
@@ -371,7 +371,7 @@ describe("App Component", () => {
 
     test("deben aparecer los pokemons de la nueva región de Hoenn", async () => {
       const mockFetch = vi.fn();
-      global.fetch = mockFetch;
+      globalThis.fetch = mockFetch;
 
       mockFetch
         .mockResolvedValueOnce({
@@ -399,6 +399,19 @@ describe("App Component", () => {
       const groudon = screen.getByText("groudon");
 
       expect(groudon).toBeInTheDocument();
+    });
+  });
+
+  describe("Carga inicial del skeleton de la página", () => {
+    test("Debe mostrarse el grid de las cartas", () => {
+      render(<App />);
+      const grid = screen.queryByTestId("grid");
+      expect(grid).toBeInTheDocument();
+    });
+    test("Debe mostrar las 6 cartas", () => {
+      render(<App />);
+      const card = screen.getAllByTestId("card");
+      expect(card.length).toBe(6);
     });
   });
 });
