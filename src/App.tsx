@@ -19,6 +19,16 @@ import steel from "./assets/steel.svg";
 import water from "./assets/water.svg";
 import pokeball from "./assets/pokeball.svg";
 
+const KANTO_REGION: string = "kanto";
+const JOHTO_REGION: string = "johto";
+const HOENN_REGION: string = "hoenn";
+const SINNOH_REGION: string = "sinnoh";
+const UNOVA_REGION: string = "unova";
+const KALOS_REGION: string = "kalos";
+const ALOLA_REGION: string = "alola";
+const GALAR_REGION: string = "galar";
+const PALDEA_REGION: string = "paldea";
+
 /**
  *  Icons for the Pokemon types
  */
@@ -44,15 +54,15 @@ const icons: any = {
 };
 
 const regions: string[] = [
-  "kanto",
-  "johto",
-  "hoenn",
-  "sinnoh",
-  "unova",
-  "kalos",
-  "alola",
-  "galar",
-  "paldea",
+  KANTO_REGION,
+  JOHTO_REGION,
+  HOENN_REGION,
+  SINNOH_REGION,
+  UNOVA_REGION,
+  KALOS_REGION,
+  ALOLA_REGION,
+  GALAR_REGION,
+  PALDEA_REGION,
 ];
 
 export const App = () => {
@@ -61,7 +71,7 @@ export const App = () => {
   const [result, setResult] = useState<any>([]);
   const [finalResult, setFinalResult] = useState<any>([]);
   const [search, setSearch] = useState<any>("");
-  const [region, setRegion] = useState<any>("kanto");
+  const [region, setRegion] = useState<any>(KANTO_REGION);
   const [showRegs, setShowregs] = useState<any>(false);
   const [showSort, setShowSort] = useState<any>(false);
   const [sort, setSort] = useState<any>("default");
@@ -75,31 +85,31 @@ export const App = () => {
       setFilter(true);
 
       let regionStart, regionEnd;
-      if (region === "kanto") {
+      if (region === KANTO_REGION) {
         regionStart = 0;
         regionEnd = 151;
-      } else if (region === "johto") {
+      } else if (region === JOHTO_REGION) {
         regionStart = 151;
         regionEnd = 251;
-      } else if (region === "hoenn") {
+      } else if (region === HOENN_REGION) {
         regionStart = 251;
         regionEnd = 386;
-      } else if (region === "sinnoh") {
+      } else if (region === SINNOH_REGION) {
         regionStart = 386;
         regionEnd = 494;
-      } else if (region === "unova") {
+      } else if (region === UNOVA_REGION) {
         regionStart = 494;
         regionEnd = 649;
-      } else if (region === "kalos") {
+      } else if (region === KALOS_REGION) {
         regionStart = 649;
         regionEnd = 721;
-      } else if (region === "alola") {
+      } else if (region === ALOLA_REGION) {
         regionStart = 721;
         regionEnd = 809;
-      } else if (region === "galar") {
+      } else if (region === GALAR_REGION) {
         regionStart = 809;
         regionEnd = 905;
-      } else if (region === "paldea") {
+      } else if (region === PALDEA_REGION) {
         regionStart = 905;
         regionEnd = 1025;
       } else {
