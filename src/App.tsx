@@ -129,7 +129,7 @@ export const App = () => {
   const [filteredPokemons, setFilteredPokemons] = useState<any>([]);
   const [search, setSearch] = useState<string>("");
   const [region, setRegion] = useState<string>(KANTO_REGION);
-  const [showRegs, setShowregs] = useState<boolean>(false);
+  const [showRegions, setShowRegions] = useState<boolean>(false);
   const [showSort, setShowSort] = useState<boolean>(false);
   const [sort, setSort] = useState<string>(SORT_DEFAULT);
 
@@ -137,7 +137,7 @@ export const App = () => {
     /**
      *  Pokemon data loading and loading state management
      */
-    const getData = async () => {
+    const getPokemonsData = async () => {
       setLoading(true);
       setFilter(true);
 
@@ -164,7 +164,7 @@ export const App = () => {
       setFilteredPokemons(pokemonsData);
       setLoading(false);
     };
-    getData();
+    getPokemonsData();
   }, [region]);
   /**
    * Filters results based on input query term.
@@ -172,9 +172,9 @@ export const App = () => {
   useEffect(() => {
     setFilteredPokemons(
       pokemons.filter(
-        (res) =>
-          res.name.includes(search.toLowerCase()) ||
-          !!res.types.find((type) =>
+        (pokemon) =>
+          pokemon.name.includes(search.toLowerCase()) ||
+          !!pokemon.types.find((type) =>
             type.type.name.startsWith(search.toLowerCase()),
           ),
       ),
@@ -271,10 +271,10 @@ export const App = () => {
               aria-haspopup="listbox"
               aria-controls="region-list"
               aria-label="Select region"
-              aria-expanded={showRegs}
-              className={`dropdown__button ${showRegs ? "active" : ""}`}
+              aria-expanded={showRegions}
+              className={`dropdown__button ${showRegions ? "active" : ""}`}
               onClick={() =>
-                setShowregs((prev) => {
+                setShowRegions((prev) => {
                   if (showSort) {
                     setShowSort(false);
                   }
@@ -309,8 +309,8 @@ export const App = () => {
             <ol
               role="listbox"
               id="region-list"
-              hidden={!showRegs}
-              className={`dropdown__list ${!showRegs ? "hide" : ""}`}
+              hidden={!showRegions}
+              className={`dropdown__list ${!showRegions ? "hide" : ""}`}
             >
               {regions.map((key) => (
                 <li
@@ -321,12 +321,12 @@ export const App = () => {
                   className={region === key ? "active" : ""}
                   onClick={() => {
                     setRegion(key);
-                    setShowregs(false);
+                    setShowRegions(false);
                   }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       setRegion(key);
-                      setShowregs(false);
+                      setShowRegions(false);
                     }
                   }}
                 >
@@ -345,7 +345,7 @@ export const App = () => {
             className="sort__button"
             onClick={() =>
               setShowSort((prev) => {
-                if (showRegs) setShowregs(false);
+                if (showRegions) setShowRegions(false);
                 return !prev;
               })
             }
