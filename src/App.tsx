@@ -83,7 +83,6 @@ type RegionRangeItem = {
 type RegionRanges = {
   [key: string]: RegionRangeItem;
 };
-
 const regionRanges: RegionRanges = {
   kanto: {
     start: 0,
@@ -210,10 +209,10 @@ export const App = () => {
       if (sort === pokemonProperties.defense) {
         sortByProperty(pokemonProperties.defense);
       }
-      if (sort === "specialAttack") {
+      if (sort === pokemonProperties.specialAttack) {
         sortByProperty(pokemonProperties.specialAttack);
       }
-      if (sort === "specialDefense") {
+      if (sort === pokemonProperties.specialDefense) {
         sortByProperty(pokemonProperties.specialDefense);
       }
       if (sort === pokemonProperties.speed) {
@@ -463,16 +462,16 @@ export const App = () => {
                   aria-label="Special attack"
                   tabIndex={0}
                   className={`sort__pill ${
-                    sort === "specialAttack" ? "active" : ""
+                    sort === "special-attack" ? "active" : ""
                   }`}
-                  aria-checked={sort === "specialAttack"}
+                  aria-checked={sort === "special-attack"}
                   onClick={() => {
-                    setSort("specialAttack");
+                    setSort("special-attack");
                     setShowSort(false);
                   }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                      setSort("specialAttack");
+                      setSort("special-attack");
                       setShowSort(false);
                     }
                   }}
@@ -485,16 +484,16 @@ export const App = () => {
                   aria-label="Special defense"
                   tabIndex={0}
                   className={`sort__pill ${
-                    sort === "specialDefense" ? "active" : ""
+                    sort === "special-defense" ? "active" : ""
                   }`}
-                  aria-checked={sort === "specialDefense"}
+                  aria-checked={sort === "special-defense"}
                   onClick={() => {
-                    setSort("specialDefense");
+                    setSort("special-defense");
                     setShowSort(false);
                   }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                      setSort("specialDefense");
+                      setSort("special-defense");
                       setShowSort(false);
                     }
                   }}
