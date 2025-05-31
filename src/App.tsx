@@ -74,6 +74,47 @@ const regions: string[] = [
   PALDEA_REGION,
 ];
 
+const SORT_DEFAULT: string = "default";
+
+const regionRanges = {
+  kanto: {
+    start: 0,
+    end: 151,
+  },
+  johto: {
+    start: 151,
+    end: 251,
+  },
+  hoenn: {
+    start: 251,
+    end: 386,
+  },
+  sinnoh: {
+    start: 386,
+    end: 494,
+  },
+  unova: {
+    start: 494,
+    end: 649,
+  },
+  kalos: {
+    start: 649,
+    end: 721,
+  },
+  alola: {
+    start: 721,
+    end: 809,
+  },
+  galar: {
+    start: 809,
+    end: 905,
+  },
+  paldea: {
+    start: 905,
+    end: 1025,
+  },
+};
+
 export const App = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
@@ -83,7 +124,7 @@ export const App = () => {
   const [region, setRegion] = useState<string>(KANTO_REGION);
   const [showRegs, setShowregs] = useState<boolean>(false);
   const [showSort, setShowSort] = useState<boolean>(false);
-  const [sort, setSort] = useState<string>("default");
+  const [sort, setSort] = useState<string>(SORT_DEFAULT);
 
   useEffect(() => {
     /**
@@ -93,44 +134,24 @@ export const App = () => {
       setLoading(true);
       setFilter(true);
 
-      let regionStart, regionEnd;
-      if (region === KANTO_REGION) {
+      let regionStart: number;
+      let regionEnd: number;
+      if (!regions.includes(region)) {
         regionStart = 0;
         regionEnd = 151;
-      } else if (region === JOHTO_REGION) {
-        regionStart = 151;
-        regionEnd = 251;
-      } else if (region === HOENN_REGION) {
-        regionStart = 251;
-        regionEnd = 386;
-      } else if (region === SINNOH_REGION) {
-        regionStart = 386;
-        regionEnd = 494;
-      } else if (region === UNOVA_REGION) {
-        regionStart = 494;
-        regionEnd = 649;
-      } else if (region === KALOS_REGION) {
-        regionStart = 649;
-        regionEnd = 721;
-      } else if (region === ALOLA_REGION) {
-        regionStart = 721;
-        regionEnd = 809;
-      } else if (region === GALAR_REGION) {
-        regionStart = 809;
-        regionEnd = 905;
-      } else if (region === PALDEA_REGION) {
-        regionStart = 905;
-        regionEnd = 1025;
       } else {
-        regionStart = 0;
-        regionEnd = 151;
+        regionStart = regionRanges[region].start;
+        regionEnd = regionRanges[region].end;
       }
       const { results }: any = await fetch(
         `https://pokeapi.co/api/v2/pokemon?offset=${regionStart}&limit=${regionEnd}`,
-      ).then((res) => res.json());
+      ).then((apiPokemonList) => apiPokemonList.json());
       const result = await Promise.all(
         results.map(
-          async ({ url }) => await fetch(url).then((res) => res.json()),
+          async ({ url }) =>
+            await fetch(url).then((apiPokemonDetail) =>
+              apiPokemonDetail.json(),
+            ),
         ),
       );
       setResult(result);
@@ -158,7 +179,7 @@ export const App = () => {
    * Sorts results based on selected sorting criteria.
    */
   useEffect(() => {
-    if (sort !== "default") {
+    if (sort !== SORT_DEFAULT) {
       if (sort === pokemonProperties.hp) {
         setFinalResult((prev) =>
           [...prev].sort((a, b) => {
@@ -238,7 +259,7 @@ export const App = () => {
         );
       }
     }
-    if (sort === "default") {
+    if (sort === SORT_DEFAULT) {
       setFinalResult((prev) =>
         [...prev].sort((a, b) => {
           return a.id - b.id;
@@ -401,15 +422,15 @@ export const App = () => {
                   role="radio"
                   aria-label="Default"
                   tabIndex={0}
-                  className={`sort__pill ${sort === "default" ? "active" : ""}`}
-                  aria-checked={sort === "default"}
+                  className={`sort__pill ${sort === SORT_DEFAULT ? "active" : ""}`}
+                  aria-checked={sort === SORT_DEFAULT}
                   onClick={() => {
-                    setSort("default");
+                    setSort(SORT_DEFAULT);
                     setShowSort(false);
                   }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                      setSort("default");
+                      setSort(SORT_DEFAULT);
                       setShowSort(false);
                     }
                   }}
