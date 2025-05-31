@@ -20,7 +20,7 @@ import water from "./assets/water.svg";
 import pokeball from "./assets/pokeball.svg";
 
 /**
- *  Iconos de los tipos de Pokémon
+ *  Icons for the Pokemon types
  */
 const icons: any = {
   bug,
@@ -60,7 +60,7 @@ export const App = () => {
   const [filter, setFilter] = useState<any>(false);
   const [result, setResult] = useState<any>([]);
   const [finalResult, setFinalResult] = useState<any>([]);
-  const [busqueda, setBusqueda] = useState<any>("");
+  const [search, setSearch] = useState<any>("");
   const [region, setRegion] = useState<any>("kanto");
   const [showRegs, setShowregs] = useState<any>(false);
   const [showSort, setShowSort] = useState<any>(false);
@@ -68,7 +68,7 @@ export const App = () => {
 
   useEffect(() => {
     /**
-     *  Carga de datos de Pokémons y gestión de estado de cargando.
+     *  Pokemon data loading and loading state management
      */
     const getData = async () => {
       setLoading(true);
@@ -127,14 +127,14 @@ export const App = () => {
     setFinalResult(
       result.filter(
         (res) =>
-          res.name.includes(busqueda.toLowerCase()) ||
+          res.name.includes(search.toLowerCase()) ||
           !!res.types.find((type) =>
-            type.type.name.startsWith(busqueda.toLowerCase()),
+            type.type.name.startsWith(search.toLowerCase()),
           ),
       ),
     );
     setFilter(false);
-  }, [result[0]?.id, busqueda]);
+  }, [result[0]?.id, search]);
   /**
    * Sorts results based on selected sorting criteria.
    */
@@ -247,8 +247,8 @@ export const App = () => {
           <input
             type="text"
             placeholder="Search a Pokémon..."
-            value={busqueda}
-            onChange={(e) => setBusqueda(e.target.value)}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
           {/* Shows regions */}
           <div className="dropdown">
@@ -358,7 +358,6 @@ export const App = () => {
             </svg>
           </button>
 
-          {/* Muestra el menú de ordenación */}
           {showSort && (
             <article className="sort__wrapper">
               <h3 className="sort__title">Sort by</h3>
@@ -510,7 +509,7 @@ export const App = () => {
           )}
         </section>
 
-        {/* Muestra cartas cargando */}
+        {/* Shows loading cards */}
         <section>
           {(loading || filter) && (
             <div className="grid" data-testid="grid" aria-hidden="true">
@@ -658,7 +657,7 @@ export const App = () => {
           )}
         </section>
         {!loading && finalResult.length === 0 && (
-          <p className="noresults">No results for "{busqueda}"</p>
+          <p className="noresults">No results for "{search}"</p>
         )}
       </main>
 
