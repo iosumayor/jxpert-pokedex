@@ -19,16 +19,6 @@ import steel from "./assets/steel.svg";
 import water from "./assets/water.svg";
 import pokeball from "./assets/pokeball.svg";
 
-const KANTO_REGION: string = "kanto";
-const JOHTO_REGION: string = "johto";
-const HOENN_REGION: string = "hoenn";
-const SINNOH_REGION: string = "sinnoh";
-const UNOVA_REGION: string = "unova";
-const KALOS_REGION: string = "kalos";
-const ALOLA_REGION: string = "alola";
-const GALAR_REGION: string = "galar";
-const PALDEA_REGION: string = "paldea";
-
 const pokemonProperties = {
   hp: "hp",
   attack: "attack",
@@ -62,16 +52,16 @@ const icons: Icons = {
   water,
 };
 
-const regions: string[] = [
-  KANTO_REGION,
-  JOHTO_REGION,
-  HOENN_REGION,
-  SINNOH_REGION,
-  UNOVA_REGION,
-  KALOS_REGION,
-  ALOLA_REGION,
-  GALAR_REGION,
-  PALDEA_REGION,
+const regions: Region[] = [
+  "kanto",
+  "johto",
+  "hoenn",
+  "sinnoh",
+  "unova",
+  "kalos",
+  "alola",
+  "galar",
+  "paldea",
 ];
 
 const SORT_DEFAULT: string = "default";
@@ -80,9 +70,21 @@ type RegionRangeItem = {
   start: number;
   end: number;
 };
+type Region =
+  | "kanto"
+  | "johto"
+  | "hoenn"
+  | "sinnoh"
+  | "unova"
+  | "kalos"
+  | "alola"
+  | "galar"
+  | "paldea";
+
 type RegionRanges = {
-  [key: string]: RegionRangeItem;
+  [key in Region]: RegionRangeItem;
 };
+
 const regionRanges: RegionRanges = {
   kanto: {
     start: 0,
@@ -122,13 +124,15 @@ const regionRanges: RegionRanges = {
   },
 };
 
+// type Region = keyof typeof regionRanges;
+
 export const App = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
   const [pokemons, setPokemons] = useState<any>([]);
   const [filteredPokemons, setFilteredPokemons] = useState<any>([]);
   const [search, setSearch] = useState<string>("");
-  const [region, setRegion] = useState<string>(KANTO_REGION);
+  const [region, setRegion] = useState<Region>("kanto");
   const [showRegions, setShowRegions] = useState<boolean>(false);
   const [showSort, setShowSort] = useState<boolean>(false);
   const [sort, setSort] = useState<string>(SORT_DEFAULT);
@@ -143,8 +147,8 @@ export const App = () => {
 
       let regionStart: number, regionEnd: number;
       if (!regions.includes(region)) {
-        regionStart = regionRanges[KANTO_REGION].start;
-        regionEnd = regionRanges[KANTO_REGION].end;
+        regionStart = regionRanges.kanto.start;
+        regionEnd = regionRanges.kanto.end;
       } else {
         regionStart = regionRanges[region].start;
         regionEnd = regionRanges[region].end;
@@ -206,6 +210,7 @@ export const App = () => {
         }),
       );
     }
+    // sortByProperty(sort);
     if (sort === pokemonProperties.hp) {
       sortByProperty(pokemonProperties.hp);
     }
