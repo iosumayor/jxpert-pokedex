@@ -61,7 +61,7 @@ export const App = () => {
   const [result, setResult] = useState<any>([]);
   const [finalResult, setFinalResult] = useState<any>([]);
   const [busqueda, setBusqueda] = useState<any>("");
-  const [reg, setreg] = useState<any>("kanto");
+  const [region, setRegion] = useState<any>("kanto");
   const [showregs, setShowregs] = useState<any>(false);
   const [showSort, setShowSort] = useState<any>(false);
   const [sorting, setSort] = useState<any>("default");
@@ -74,40 +74,40 @@ export const App = () => {
       setLdr(true);
       setFilter(true);
 
-      let regStart, regEnd;
-      if (reg === "kanto") {
-        regStart = 0;
-        regEnd = 151;
-      } else if (reg === "johto") {
-        regStart = 151;
-        regEnd = 251;
-      } else if (reg === "hoenn") {
-        regStart = 251;
-        regEnd = 386;
-      } else if (reg === "sinnoh") {
-        regStart = 386;
-        regEnd = 494;
-      } else if (reg === "unova") {
-        regStart = 494;
-        regEnd = 649;
-      } else if (reg === "kalos") {
-        regStart = 649;
-        regEnd = 721;
-      } else if (reg === "alola") {
-        regStart = 721;
-        regEnd = 809;
-      } else if (reg === "galar") {
-        regStart = 809;
-        regEnd = 905;
-      } else if (reg === "paldea") {
-        regStart = 905;
-        regEnd = 1025;
+      let regionStart, regionEnd;
+      if (region === "kanto") {
+        regionStart = 0;
+        regionEnd = 151;
+      } else if (region === "johto") {
+        regionStart = 151;
+        regionEnd = 251;
+      } else if (region === "hoenn") {
+        regionStart = 251;
+        regionEnd = 386;
+      } else if (region === "sinnoh") {
+        regionStart = 386;
+        regionEnd = 494;
+      } else if (region === "unova") {
+        regionStart = 494;
+        regionEnd = 649;
+      } else if (region === "kalos") {
+        regionStart = 649;
+        regionEnd = 721;
+      } else if (region === "alola") {
+        regionStart = 721;
+        regionEnd = 809;
+      } else if (region === "galar") {
+        regionStart = 809;
+        regionEnd = 905;
+      } else if (region === "paldea") {
+        regionStart = 905;
+        regionEnd = 1025;
       } else {
-        regStart = 0;
-        regEnd = 151;
+        regionStart = 0;
+        regionEnd = 151;
       }
       const { results }: any = await fetch(
-        `https://pokeapi.co/api/v2/pokemon?offset=${regStart}&limit=${regEnd}`,
+        `https://pokeapi.co/api/v2/pokemon?offset=${regionStart}&limit=${regionEnd}`,
       ).then((res) => res.json());
       const result = await Promise.all(
         results.map(
@@ -119,7 +119,7 @@ export const App = () => {
       setLdr(false);
     };
     getData();
-  }, [reg]);
+  }, [region]);
   /**
    * Filters results based on input query term.
    */
@@ -255,8 +255,8 @@ export const App = () => {
             <button
               role="combobox"
               aria-haspopup="listbox"
-              aria-controls="reg-list"
-              aria-label="Select reg"
+              aria-controls="region-list"
+              aria-label="Select region"
               aria-expanded={showregs}
               className={`dropdown__button ${showregs ? "active" : ""}`}
               onClick={() =>
@@ -268,7 +268,7 @@ export const App = () => {
                 })
               }
             >
-              {reg}
+              {region}
               <svg
                 width="16"
                 height="16"
@@ -294,7 +294,7 @@ export const App = () => {
             </button>
             <ol
               role="listbox"
-              id="reg-list"
+              id="region-list"
               hidden={!showregs}
               className={`dropdown__list ${!showregs ? "hide" : ""}`}
             >
@@ -302,16 +302,16 @@ export const App = () => {
                 <li
                   key={key}
                   role="radio"
-                  aria-checked={reg === key}
+                  aria-checked={region === key}
                   tabIndex={0}
-                  className={reg === key ? "active" : ""}
+                  className={region === key ? "active" : ""}
                   onClick={() => {
-                    setreg(key);
+                    setRegion(key);
                     setShowregs(false);
                   }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                      setreg(key);
+                      setRegion(key);
                       setShowregs(false);
                     }
                   }}
