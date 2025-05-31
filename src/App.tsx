@@ -76,7 +76,14 @@ const regions: string[] = [
 
 const SORT_DEFAULT: string = "default";
 
-const regionRanges = {
+type RegionRangeItem = {
+  [key: string]: number;
+};
+type RegionRanges = {
+  [key: string]: RegionRangeItem;
+};
+
+const regionRanges: RegionRanges = {
   kanto: {
     start: 0,
     end: 151,
@@ -134,8 +141,7 @@ export const App = () => {
       setLoading(true);
       setFilter(true);
 
-      let regionStart: number;
-      let regionEnd: number;
+      let regionStart: number, regionEnd: number;
       if (!regions.includes(region)) {
         regionStart = 0;
         regionEnd = 151;
