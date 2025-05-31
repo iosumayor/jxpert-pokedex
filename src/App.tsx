@@ -19,15 +19,6 @@ import steel from "./assets/steel.svg";
 import water from "./assets/water.svg";
 import pokeball from "./assets/pokeball.svg";
 
-const pokemonProperties = {
-  hp: "hp",
-  attack: "attack",
-  defense: "defense",
-  specialAttack: "special-attack",
-  specialDefense: "special-defense",
-  speed: "speed",
-};
-
 type Icons = {
   [key: string]: string;
 };
@@ -209,26 +200,9 @@ export const App = () => {
           return a.id - b.id;
         }),
       );
+      return;
     }
-    // sortByProperty(sort);
-    if (sort === pokemonProperties.hp) {
-      sortByProperty(pokemonProperties.hp);
-    }
-    if (sort === pokemonProperties.attack) {
-      sortByProperty(pokemonProperties.attack);
-    }
-    if (sort === pokemonProperties.defense) {
-      sortByProperty(pokemonProperties.defense);
-    }
-    if (sort === pokemonProperties.specialAttack) {
-      sortByProperty(pokemonProperties.specialAttack);
-    }
-    if (sort === pokemonProperties.specialDefense) {
-      sortByProperty(pokemonProperties.specialDefense);
-    }
-    if (sort === pokemonProperties.speed) {
-      sortByProperty(pokemonProperties.speed);
-    }
+    sortByProperty(sort);
   }, [filteredPokemons[0]?.id, sort]);
 
   return (
