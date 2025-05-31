@@ -199,32 +199,30 @@ export const App = () => {
   };
 
   useEffect(() => {
-    if (sort !== SORT_DEFAULT) {
-      if (sort === pokemonProperties.hp) {
-        sortByProperty(pokemonProperties.hp);
-      }
-      if (sort === pokemonProperties.attack) {
-        sortByProperty(pokemonProperties.attack);
-      }
-      if (sort === pokemonProperties.defense) {
-        sortByProperty(pokemonProperties.defense);
-      }
-      if (sort === pokemonProperties.specialAttack) {
-        sortByProperty(pokemonProperties.specialAttack);
-      }
-      if (sort === pokemonProperties.specialDefense) {
-        sortByProperty(pokemonProperties.specialDefense);
-      }
-      if (sort === pokemonProperties.speed) {
-        sortByProperty(pokemonProperties.speed);
-      }
-    }
     if (sort === SORT_DEFAULT) {
       setFilteredPokemons((previous) =>
         [...previous].sort((a, b) => {
           return a.id - b.id;
         }),
       );
+    }
+    if (sort === pokemonProperties.hp) {
+      sortByProperty(pokemonProperties.hp);
+    }
+    if (sort === pokemonProperties.attack) {
+      sortByProperty(pokemonProperties.attack);
+    }
+    if (sort === pokemonProperties.defense) {
+      sortByProperty(pokemonProperties.defense);
+    }
+    if (sort === pokemonProperties.specialAttack) {
+      sortByProperty(pokemonProperties.specialAttack);
+    }
+    if (sort === pokemonProperties.specialDefense) {
+      sortByProperty(pokemonProperties.specialDefense);
+    }
+    if (sort === pokemonProperties.speed) {
+      sortByProperty(pokemonProperties.speed);
     }
   }, [filteredPokemons[0]?.id, sort]);
 
