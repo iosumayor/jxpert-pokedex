@@ -43,7 +43,7 @@ const icons: any = {
   water,
 };
 
-const regions = [
+const regions: string[] = [
   "kanto",
   "johto",
   "hoenn",
