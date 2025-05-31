@@ -125,8 +125,8 @@ const regionRanges: RegionRanges = {
 export const App = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
-  const [result, setResult] = useState<any>([]);
-  const [finalResult, setFinalResult] = useState<any>([]);
+  const [pokemons, setPokemons] = useState<any>([]);
+  const [filteredPokemons, setFilteredPokemons] = useState<any>([]);
   const [search, setSearch] = useState<string>("");
   const [region, setRegion] = useState<string>(KANTO_REGION);
   const [showRegs, setShowregs] = useState<boolean>(false);
@@ -152,7 +152,7 @@ export const App = () => {
       const { results }: any = await fetch(
         `https://pokeapi.co/api/v2/pokemon?offset=${regionStart}&limit=${regionEnd}`,
       ).then((apiPokemonList) => apiPokemonList.json());
-      const pokemons = await Promise.all(
+      const pokemonsData = await Promise.all(
         results.map(
           async ({ url }) =>
             await fetch(url).then((apiPokemonDetail) =>
@@ -160,8 +160,8 @@ export const App = () => {
             ),
         ),
       );
-      setResult(pokemons);
-      setFinalResult(pokemons);
+      setPokemons(pokemonsData);
+      setFilteredPokemons(pokemonsData);
       setLoading(false);
     };
     getData();
@@ -170,8 +170,8 @@ export const App = () => {
    * Filters results based on input query term.
    */
   useEffect(() => {
-    setFinalResult(
-      result.filter(
+    setFilteredPokemons(
+      pokemons.filter(
         (res) =>
           res.name.includes(search.toLowerCase()) ||
           !!res.types.find((type) =>
@@ -180,12 +180,12 @@ export const App = () => {
       ),
     );
     setFilter(false);
-  }, [result[0]?.id, search]);
+  }, [pokemons[0]?.id, search]);
   /**
    * Sorts results based on selected sorting criteria.
    */
   const sortByProperty = (property: string) => {
-    setFinalResult((previous) =>
+    setFilteredPokemons((previous) =>
       [...previous].sort((pokemon1, pokemon2) => {
         const pokemon1Stat = pokemon1.stats.find(
           (stat) => stat.stat.name === property,
@@ -220,13 +220,13 @@ export const App = () => {
       }
     }
     if (sort === SORT_DEFAULT) {
-      setFinalResult((prev) =>
-        [...prev].sort((a, b) => {
+      setFilteredPokemons((previous) =>
+        [...previous].sort((a, b) => {
           return a.id - b.id;
         }),
       );
     }
-  }, [finalResult[0]?.id, sort]);
+  }, [filteredPokemons[0]?.id, sort]);
 
   return (
     <div className="layout">
@@ -545,9 +545,9 @@ export const App = () => {
             </div>
           )}
           {/* Prints cards */}
-          {!filter && !loading && finalResult.length > 0 && (
+          {!filter && !loading && filteredPokemons.length > 0 && (
             <ul className="grid" data-testid="grid">
-              {finalResult.map((res) => {
+              {filteredPokemons.map((res) => {
                 const customStyles: any = {
                   "--color-type": `var(--color-${res.types[0].type.name}`,
                 };
@@ -672,7 +672,7 @@ export const App = () => {
             </ul>
           )}
         </section>
-        {!loading && finalResult.length === 0 && (
+        {!loading && filteredPokemons.length === 0 && (
           <p className="noresults">No results for "{search}"</p>
         )}
       </main>
