@@ -77,7 +77,8 @@ const regions: string[] = [
 const SORT_DEFAULT: string = "default";
 
 type RegionRangeItem = {
-  [key: string]: number;
+  start: number;
+  end: number;
 };
 type RegionRanges = {
   [key: string]: RegionRangeItem;
@@ -143,8 +144,8 @@ export const App = () => {
 
       let regionStart: number, regionEnd: number;
       if (!regions.includes(region)) {
-        regionStart = 0;
-        regionEnd = 151;
+        regionStart = regionRanges[KANTO_REGION].start;
+        regionEnd = regionRanges[KANTO_REGION].end;
       } else {
         regionStart = regionRanges[region].start;
         regionEnd = regionRanges[region].end;
@@ -185,11 +186,15 @@ export const App = () => {
    * Sorts results based on selected sorting criteria.
    */
   const sortByProperty = (property: string) => {
-    setFinalResult((prev) =>
-      [...prev].sort((a, b) => {
-        const aStat = a.stats.find((stat) => stat.stat.name === property);
-        const bStat = b.stats.find((stat) => stat.stat.name === property);
-        return bStat.base_stat - aStat.base_stat;
+    setFinalResult((previous) =>
+      [...previous].sort((pokemon1, pokemon2) => {
+        const pokemon1Stat = pokemon1.stats.find(
+          (stat) => stat.stat.name === property,
+        );
+        const pokemon2Stat = pokemon2.stats.find(
+          (stat) => stat.stat.name === property,
+        );
+        return pokemon2Stat.base_stat - pokemon1Stat.base_stat;
       }),
     );
   };
