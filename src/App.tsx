@@ -22,7 +22,7 @@ import pokeball from "./assets/pokeball.svg";
 /**
  *  Iconos de los tipos de Pokémon
  */
-const icns: any = {
+const icons: any = {
   bug,
   dark,
   dragon,
@@ -43,7 +43,7 @@ const icns: any = {
   water,
 };
 
-const regs = [
+const regions = [
   "kanto",
   "johto",
   "hoenn",
@@ -57,7 +57,7 @@ const regs = [
 
 export const App = () => {
   const [ldr, setLdr] = useState<any>(false);
-  const [fltr, setFltr] = useState<any>(false);
+  const [filter, setFilter] = useState<any>(false);
   const [result, setResult] = useState<any>([]);
   const [finalResult, setFinalResult] = useState<any>([]);
   const [busqueda, setBusqueda] = useState<any>("");
@@ -72,7 +72,7 @@ export const App = () => {
      */
     const getData = async () => {
       setLdr(true);
-      setFltr(true);
+      setFilter(true);
 
       let regStart, regEnd;
       if (reg === "kanto") {
@@ -133,7 +133,7 @@ export const App = () => {
           ),
       ),
     );
-    setFltr(false);
+    setFilter(false);
   }, [result[0]?.id, busqueda]);
   /**
    * Sorts results based on selected sorting criteria.
@@ -298,7 +298,7 @@ export const App = () => {
               hidden={!showregs}
               className={`dropdown__list ${!showregs ? "hide" : ""}`}
             >
-              {regs.map((key) => (
+              {regions.map((key) => (
                 <li
                   key={key}
                   role="radio"
@@ -520,7 +520,7 @@ export const App = () => {
 
         {/* Muestra cartas cargando */}
         <section>
-          {(ldr || fltr) && (
+          {(ldr || filter) && (
             <div className="grid" data-testid="grid" aria-hidden="true">
               {Array.from({ length: 6 }, (_, index) => {
                 return (
@@ -538,7 +538,7 @@ export const App = () => {
             </div>
           )}
           {/* Prints cards */}
-          {!fltr && !ldr && finalResult.length > 0 && (
+          {!filter && !ldr && finalResult.length > 0 && (
             <ul className="grid" data-testid="grid">
               {finalResult.map((res) => {
                 const customStyles: any = {
@@ -554,13 +554,13 @@ export const App = () => {
                         </div>
                         <div className="card__tag">
                           <img
-                            src={icns[res.types[0].type.name]}
+                            src={icons[res.types[0].type.name]}
                             className="card__type"
                             alt={`${res.types[0].type.name} primary type`}
                           />
                           {res.types[1] && (
                             <img
-                              src={icns[res.types[1].type.name]}
+                              src={icons[res.types[1].type.name]}
                               className="card__type"
                               alt={`${res.types[1].type.name} secondary type`}
                             />

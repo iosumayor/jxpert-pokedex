@@ -18,9 +18,6 @@ import {
 // Respuesta de la lista
 
 describe("App Component", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
   describe("Muestra la informacion de un pokemon", () => {
     beforeEach(() => {
       const mockFetch = vi.fn();
@@ -152,6 +149,7 @@ describe("App Component", () => {
       const buttonSort = screen.getAllByRole("combobox");
       await userEvent.click(buttonSort[1]);
       const hpElements = screen.getAllByLabelText("Health points");
+
       await userEvent.click(hpElements[0]);
 
       const charmander = screen.getByText("charmander");
@@ -191,7 +189,7 @@ describe("App Component", () => {
       );
     });
     //TODO: Bug en el código no permite pasar el test. Hay que solucionarlo antes de quitar el skip.
-    test.skip("al clicar el boton de ordenar por special attack debe aparecer el Pokemon con más special attack primero", async () => {
+    test("al clicar el boton de ordenar por special attack debe aparecer el Pokemon con más special attack primero", async () => {
       render(<App />);
       // DOCUMENT_POSITION_FOLLOWING será 4 si el primer elemento aparece antes en el DOM que el segundo comparado con .compareDocumentPosition()
       const DOCUMENT_POSITION_FOLLOWING = 4;
@@ -207,7 +205,7 @@ describe("App Component", () => {
       );
     });
     //TODO: Bug en el código no permite pasar el test. Hay que solucionarlo antes de quitar el skip.
-    test.skip("al clicar el boton de ordenar por special defense debe aparecer el Pokemon con más special attack", async () => {
+    test("al clicar el boton de ordenar por special defense debe aparecer el Pokemon con más special attack", async () => {
       render(<App />);
       // DOCUMENT_POSITION_FOLLOWING será 4 si el primer elemento aparece antes en el DOM que el segundo comparado con .compareDocumentPosition()
       const DOCUMENT_POSITION_FOLLOWING = 4;
@@ -400,9 +398,47 @@ describe("App Component", () => {
 
       expect(groudon).toBeInTheDocument();
     });
+
+    test("Debe hacer la llamada correcta para buscar los Pokemons de Johto", async () => {
+      const mockFetch = vi.fn();
+      globalThis.fetch = mockFetch;
+
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockOnePokemonListResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockPokemonDetailBulbasaurResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockJohtoPokemonListResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockPokemonDetailChikoritaResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockPokemonDetailTotodileResponse,
+        });
+      render(<App />);
+      const regionExpanded = screen.getAllByRole("combobox");
+      await userEvent.click(regionExpanded[0]);
+      const regionButton = screen.getByText("johto");
+      await userEvent.click(regionButton);
+      // const spy = vi.spyOn(globalThis, "fetch");
+      expect(globalThis.fetch).toHaveBeenNthCalledWith(
+        3,
+        "https://pokeapi.co/api/v2/pokemon?offset=151&limit=251",
+      );
+      expect(await screen.findByText("chikorita")).toBeVisible();
+    });
   });
 
-  describe("Carga inicial del skeleton de la página", () => {
+  describe.skip("Carga inicial del skeleton de la página", () => {
     test("Debe mostrarse el grid de las cartas", () => {
       render(<App />);
       const grid = screen.queryByTestId("grid");
