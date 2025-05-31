@@ -29,10 +29,19 @@ const ALOLA_REGION: string = "alola";
 const GALAR_REGION: string = "galar";
 const PALDEA_REGION: string = "paldea";
 
-/**
- *  Icons for the Pokemon types
- */
-const icons: any = {
+const pokemonProperties = {
+  hp: "hp",
+  attack: "attack",
+  defense: "defense",
+  specialAttack: "special-attack",
+  specialDefense: "special-defense",
+  speed: "speed",
+};
+
+type Icons = {
+  [key: string]: string;
+};
+const icons: Icons = {
   bug,
   dark,
   dragon,
@@ -66,15 +75,15 @@ const regions: string[] = [
 ];
 
 export const App = () => {
-  const [loading, setLoading] = useState<any>(false);
-  const [filter, setFilter] = useState<any>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [filter, setFilter] = useState<boolean>(false);
   const [result, setResult] = useState<any>([]);
   const [finalResult, setFinalResult] = useState<any>([]);
-  const [search, setSearch] = useState<any>("");
-  const [region, setRegion] = useState<any>(KANTO_REGION);
-  const [showRegs, setShowregs] = useState<any>(false);
-  const [showSort, setShowSort] = useState<any>(false);
-  const [sort, setSort] = useState<any>("default");
+  const [search, setSearch] = useState<string>("");
+  const [region, setRegion] = useState<string>(KANTO_REGION);
+  const [showRegs, setShowregs] = useState<boolean>(false);
+  const [showSort, setShowSort] = useState<boolean>(false);
+  const [sort, setSort] = useState<string>("default");
 
   useEffect(() => {
     /**
@@ -150,29 +159,41 @@ export const App = () => {
    */
   useEffect(() => {
     if (sort !== "default") {
-      if (sort === "hp") {
+      if (sort === pokemonProperties.hp) {
         setFinalResult((prev) =>
           [...prev].sort((a, b) => {
-            const aStat = a.stats.find((stat) => stat.stat.name === "hp");
-            const bStat = b.stats.find((stat) => stat.stat.name === "hp");
+            const aStat = a.stats.find(
+              (stat) => stat.stat.name === pokemonProperties.hp,
+            );
+            const bStat = b.stats.find(
+              (stat) => stat.stat.name === pokemonProperties.hp,
+            );
             return bStat.base_stat - aStat.base_stat;
           }),
         );
       }
-      if (sort === "attack") {
+      if (sort === pokemonProperties.attack) {
         setFinalResult((prev) =>
           [...prev].sort((a, b) => {
-            const aStat = a.stats.find((stat) => stat.stat.name === "attack");
-            const bStat = b.stats.find((stat) => stat.stat.name === "attack");
+            const aStat = a.stats.find(
+              (stat) => stat.stat.name === pokemonProperties.attack,
+            );
+            const bStat = b.stats.find(
+              (stat) => stat.stat.name === pokemonProperties.attack,
+            );
             return bStat.base_stat - aStat.base_stat;
           }),
         );
       }
-      if (sort === "defense") {
+      if (sort === pokemonProperties.defense) {
         setFinalResult((prev) =>
           [...prev].sort((a, b) => {
-            const aStat = a.stats.find((stat) => stat.stat.name === "defense");
-            const bStat = b.stats.find((stat) => stat.stat.name === "defense");
+            const aStat = a.stats.find(
+              (stat) => stat.stat.name === pokemonProperties.defense,
+            );
+            const bStat = b.stats.find(
+              (stat) => stat.stat.name === pokemonProperties.defense,
+            );
             return bStat.base_stat - aStat.base_stat;
           }),
         );
@@ -181,10 +202,10 @@ export const App = () => {
         setFinalResult((prev) =>
           [...prev].sort((a, b) => {
             const aStat = a.stats.find(
-              (stat) => stat.stat.name === "special-attack",
+              (stat) => stat.stat.name === pokemonProperties.specialAttack,
             );
             const bStat = b.stats.find(
-              (stat) => stat.stat.name === "special-attack",
+              (stat) => stat.stat.name === pokemonProperties.specialAttack,
             );
             return bStat.base_stat - aStat.base_stat;
           }),
@@ -194,20 +215,24 @@ export const App = () => {
         setFinalResult((prev) =>
           [...prev].sort((a, b) => {
             const aStat = a.stats.find(
-              (stat) => stat.stat.name === "special-defense",
+              (stat) => stat.stat.name === pokemonProperties.specialDefense,
             );
             const bStat = b.stats.find(
-              (stat) => stat.stat.name === "special-defense",
+              (stat) => stat.stat.name === pokemonProperties.specialDefense,
             );
             return bStat.base_stat - aStat.base_stat;
           }),
         );
       }
-      if (sort === "speed") {
+      if (sort === pokemonProperties.speed) {
         setFinalResult((prev) =>
           [...prev].sort((a, b) => {
-            const aStat = a.stats.find((stat) => stat.stat.name === "speed");
-            const bStat = b.stats.find((stat) => stat.stat.name === "speed");
+            const aStat = a.stats.find(
+              (stat) => stat.stat.name === pokemonProperties.speed,
+            );
+            const bStat = b.stats.find(
+              (stat) => stat.stat.name === pokemonProperties.speed,
+            );
             return bStat.base_stat - aStat.base_stat;
           }),
         );
