@@ -152,7 +152,7 @@ export const App = () => {
       const { results }: any = await fetch(
         `https://pokeapi.co/api/v2/pokemon?offset=${regionStart}&limit=${regionEnd}`,
       ).then((apiPokemonList) => apiPokemonList.json());
-      const result = await Promise.all(
+      const pokemons = await Promise.all(
         results.map(
           async ({ url }) =>
             await fetch(url).then((apiPokemonDetail) =>
@@ -160,8 +160,8 @@ export const App = () => {
             ),
         ),
       );
-      setResult(result);
-      setFinalResult(result);
+      setResult(pokemons);
+      setFinalResult(pokemons);
       setLoading(false);
     };
     getData();
@@ -184,85 +184,35 @@ export const App = () => {
   /**
    * Sorts results based on selected sorting criteria.
    */
+  const sortByProperty = (property: string) => {
+    setFinalResult((prev) =>
+      [...prev].sort((a, b) => {
+        const aStat = a.stats.find((stat) => stat.stat.name === property);
+        const bStat = b.stats.find((stat) => stat.stat.name === property);
+        return bStat.base_stat - aStat.base_stat;
+      }),
+    );
+  };
+
   useEffect(() => {
     if (sort !== SORT_DEFAULT) {
       if (sort === pokemonProperties.hp) {
-        setFinalResult((prev) =>
-          [...prev].sort((a, b) => {
-            const aStat = a.stats.find(
-              (stat) => stat.stat.name === pokemonProperties.hp,
-            );
-            const bStat = b.stats.find(
-              (stat) => stat.stat.name === pokemonProperties.hp,
-            );
-            return bStat.base_stat - aStat.base_stat;
-          }),
-        );
+        sortByProperty(pokemonProperties.hp);
       }
       if (sort === pokemonProperties.attack) {
-        setFinalResult((prev) =>
-          [...prev].sort((a, b) => {
-            const aStat = a.stats.find(
-              (stat) => stat.stat.name === pokemonProperties.attack,
-            );
-            const bStat = b.stats.find(
-              (stat) => stat.stat.name === pokemonProperties.attack,
-            );
-            return bStat.base_stat - aStat.base_stat;
-          }),
-        );
+        sortByProperty(pokemonProperties.attack);
       }
       if (sort === pokemonProperties.defense) {
-        setFinalResult((prev) =>
-          [...prev].sort((a, b) => {
-            const aStat = a.stats.find(
-              (stat) => stat.stat.name === pokemonProperties.defense,
-            );
-            const bStat = b.stats.find(
-              (stat) => stat.stat.name === pokemonProperties.defense,
-            );
-            return bStat.base_stat - aStat.base_stat;
-          }),
-        );
+        sortByProperty(pokemonProperties.defense);
       }
       if (sort === "specialAttack") {
-        setFinalResult((prev) =>
-          [...prev].sort((a, b) => {
-            const aStat = a.stats.find(
-              (stat) => stat.stat.name === pokemonProperties.specialAttack,
-            );
-            const bStat = b.stats.find(
-              (stat) => stat.stat.name === pokemonProperties.specialAttack,
-            );
-            return bStat.base_stat - aStat.base_stat;
-          }),
-        );
+        sortByProperty(pokemonProperties.specialAttack);
       }
       if (sort === "specialDefense") {
-        setFinalResult((prev) =>
-          [...prev].sort((a, b) => {
-            const aStat = a.stats.find(
-              (stat) => stat.stat.name === pokemonProperties.specialDefense,
-            );
-            const bStat = b.stats.find(
-              (stat) => stat.stat.name === pokemonProperties.specialDefense,
-            );
-            return bStat.base_stat - aStat.base_stat;
-          }),
-        );
+        sortByProperty(pokemonProperties.specialDefense);
       }
       if (sort === pokemonProperties.speed) {
-        setFinalResult((prev) =>
-          [...prev].sort((a, b) => {
-            const aStat = a.stats.find(
-              (stat) => stat.stat.name === pokemonProperties.speed,
-            );
-            const bStat = b.stats.find(
-              (stat) => stat.stat.name === pokemonProperties.speed,
-            );
-            return bStat.base_stat - aStat.base_stat;
-          }),
-        );
+        sortByProperty(pokemonProperties.speed);
       }
     }
     if (sort === SORT_DEFAULT) {
