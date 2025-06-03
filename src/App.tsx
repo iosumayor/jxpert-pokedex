@@ -154,31 +154,32 @@ export const App = () => {
     setFilter(true);
   };
 
+  const getPokemonsData = async (regionStart: number, regionEnd: number) => {
+    const { results }: any = await fetch(
+      `https://pokeapi.co/api/v2/pokemon?offset=${regionStart}&limit=${regionEnd}`,
+    ).then((apiPokemonList) => apiPokemonList.json());
+    const pokemonsData = await Promise.all(
+      results.map(
+        async ({ url }) =>
+          await fetch(url).then((apiPokemonDetail) => apiPokemonDetail.json()),
+      ),
+    );
+    return pokemonsData;
+  };
   useEffect(() => {
-    /**
-     *  Pokemon data loading and loading state management
-     */
-    const getPokemonsData = async (regionStart: number, regionEnd: number) => {
-      const { results }: any = await fetch(
-        `https://pokeapi.co/api/v2/pokemon?offset=${regionStart}&limit=${regionEnd}`,
-      ).then((apiPokemonList) => apiPokemonList.json());
-      const pokemonsData = await Promise.all(
-        results.map(
-          async ({ url }) =>
-            await fetch(url).then((apiPokemonDetail) =>
-              apiPokemonDetail.json(),
-            ),
-        ),
-      );
+    const fetchData = async () => {
+      const { regionStart, regionEnd } = getCurrentRegion();
+      setLoadingFilter();
+
+      const pokemonsData = await getPokemonsData(regionStart, regionEnd);
       setPokemons(pokemonsData);
       setFilteredPokemons(pokemonsData);
       setLoading(false);
     };
 
-    const { regionStart, regionEnd } = getCurrentRegion();
-    setLoadingFilter();
-    getPokemonsData(regionStart, regionEnd);
+    fetchData();
   }, [region]);
+
   /**
    * Filters results based on input query term.
    */
