@@ -126,6 +126,28 @@ const regionRanges: RegionRanges = {
 
 // type Region = keyof typeof regionRanges;
 
+const getCurrentRegion = (region: Region) => {
+  if (regions.includes(region)) {
+    return regionRanges[region];
+  }
+
+  return regionRanges.kanto;
+};
+
+const getPokemonsData = async (region: Region) => {
+  const { start, end } = getCurrentRegion(region);
+  const { results }: any = await fetch(
+    `https://pokeapi.co/api/v2/pokemon?offset=${start}&limit=${end}`,
+  ).then((apiPokemonList) => apiPokemonList.json());
+  const pokemonsData = await Promise.all(
+    results.map(
+      async ({ url }) =>
+        await fetch(url).then((apiPokemonDetail) => apiPokemonDetail.json()),
+    ),
+  );
+  return pokemonsData;
+};
+
 export const App = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
@@ -137,37 +159,13 @@ export const App = () => {
   const [showSort, setShowSort] = useState<boolean>(false);
   const [sort, setSort] = useState<Sort>("default");
 
-  const getCurrentRegion = () => {
-    let regionStart: number, regionEnd: number;
-    if (!regions.includes(region)) {
-      regionStart = regionRanges.kanto.start;
-      regionEnd = regionRanges.kanto.end;
-    } else {
-      regionStart = regionRanges[region].start;
-      regionEnd = regionRanges[region].end;
-    }
-    return { regionStart, regionEnd };
-  };
-
-  const getPokemonsData = async (regionStart: number, regionEnd: number) => {
-    const { results }: any = await fetch(
-      `https://pokeapi.co/api/v2/pokemon?offset=${regionStart}&limit=${regionEnd}`,
-    ).then((apiPokemonList) => apiPokemonList.json());
-    const pokemonsData = await Promise.all(
-      results.map(
-        async ({ url }) =>
-          await fetch(url).then((apiPokemonDetail) => apiPokemonDetail.json()),
-      ),
-    );
-    return pokemonsData;
-  };
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       setFilter(true);
 
-      const { regionStart, regionEnd } = getCurrentRegion();
-      const pokemonsData = await getPokemonsData(regionStart, regionEnd);
+      const pokemonsData = await getPokemonsData(region);
+
       setPokemons(pokemonsData);
       setFilteredPokemons(pokemonsData);
       setLoading(false);
