@@ -66,10 +66,10 @@ const regions: Region[] = [
 
 const SORT_DEFAULT: string = "default";
 
-// type RegionRangeItem = {
-//   start: number;
-//   end: number;
-// };
+type RegionRangeItem = {
+  start: number;
+  end: number;
+};
 
 // type Region =
 //   | "kanto"
@@ -86,7 +86,7 @@ const SORT_DEFAULT: string = "default";
 //   [key in Region]: RegionRangeItem;
 // };
 
-const regionRanges = {
+const regionRanges: Record<string, RegionRangeItem> = {
   kanto: {
     start: 0,
     end: 151,
