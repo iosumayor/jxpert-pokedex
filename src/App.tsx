@@ -149,16 +149,16 @@ export const App = () => {
     return { regionStart, regionEnd };
   };
 
+  const setLoadingFilter = () => {
+    setLoading(true);
+    setFilter(true);
+  };
+
   useEffect(() => {
     /**
      *  Pokemon data loading and loading state management
      */
-    const getPokemonsData = async () => {
-      setLoading(true);
-      setFilter(true);
-
-      const { regionStart, regionEnd } = getCurrentRegion();
-
+    const getPokemonsData = async (regionStart: number, regionEnd: number) => {
       const { results }: any = await fetch(
         `https://pokeapi.co/api/v2/pokemon?offset=${regionStart}&limit=${regionEnd}`,
       ).then((apiPokemonList) => apiPokemonList.json());
@@ -174,7 +174,10 @@ export const App = () => {
       setFilteredPokemons(pokemonsData);
       setLoading(false);
     };
-    getPokemonsData();
+
+    const { regionStart, regionEnd } = getCurrentRegion();
+    setLoadingFilter();
+    getPokemonsData(regionStart, regionEnd);
   }, [region]);
   /**
    * Filters results based on input query term.
