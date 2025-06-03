@@ -149,11 +149,6 @@ export const App = () => {
     return { regionStart, regionEnd };
   };
 
-  const setLoadingFilter = () => {
-    setLoading(true);
-    setFilter(true);
-  };
-
   const getPokemonsData = async (regionStart: number, regionEnd: number) => {
     const { results }: any = await fetch(
       `https://pokeapi.co/api/v2/pokemon?offset=${regionStart}&limit=${regionEnd}`,
@@ -168,9 +163,10 @@ export const App = () => {
   };
   useEffect(() => {
     const fetchData = async () => {
-      const { regionStart, regionEnd } = getCurrentRegion();
-      setLoadingFilter();
+      setLoading(true);
+      setFilter(true);
 
+      const { regionStart, regionEnd } = getCurrentRegion();
       const pokemonsData = await getPokemonsData(regionStart, regionEnd);
       setPokemons(pokemonsData);
       setFilteredPokemons(pokemonsData);
