@@ -19,6 +19,15 @@ import steel from "./assets/steel.svg";
 import water from "./assets/water.svg";
 import pokeball from "./assets/pokeball.svg";
 
+type Sort =
+  | "default"
+  | "hp"
+  | "attack"
+  | "defense"
+  | "special-attack"
+  | "special-defense"
+  | "speed";
+
 type Icons = {
   [key: string]: string;
 };
@@ -126,7 +135,7 @@ export const App = () => {
   const [region, setRegion] = useState<Region>("kanto");
   const [showRegions, setShowRegions] = useState<boolean>(false);
   const [showSort, setShowSort] = useState<boolean>(false);
-  const [sort, setSort] = useState<string>(SORT_DEFAULT);
+  const [sort, setSort] = useState<Sort>("default");
 
   useEffect(() => {
     /**
@@ -362,12 +371,12 @@ export const App = () => {
                   className={`sort__pill ${sort === SORT_DEFAULT ? "active" : ""}`}
                   aria-checked={sort === SORT_DEFAULT}
                   onClick={() => {
-                    setSort(SORT_DEFAULT);
+                    setSort("default");
                     setShowSort(false);
                   }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                      setSort(SORT_DEFAULT);
+                      setSort("default");
                       setShowSort(false);
                     }
                   }}
@@ -650,7 +659,7 @@ export const App = () => {
           )}
         </section>
         {!loading && filteredPokemons.length === 0 && (
-          <p className="noresults">No results for "{search}"</p>
+          <p className="noresults">No results for “{search}“</p>
         )}
       </main>
 
