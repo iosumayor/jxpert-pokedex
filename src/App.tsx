@@ -177,14 +177,20 @@ export const App = () => {
   /**
    * Filters results based on input query term.
    */
+  const findByName = (pokemon) => {
+    return pokemon.name.toLowerCase().includes(search.toLowerCase());
+  };
+
+  const findByType = (pokemon) => {
+    return pokemon.types.find((type) =>
+      type.type.name.startsWith(search.toLowerCase()),
+    );
+  };
+
   useEffect(() => {
     setFilteredPokemons(
       pokemons.filter(
-        (pokemon) =>
-          pokemon.name.includes(search.toLowerCase()) ||
-          !!pokemon.types.find((type) =>
-            type.type.name.startsWith(search.toLowerCase()),
-          ),
+        (pokemon) => findByName(pokemon) || !!findByType(pokemon),
       ),
     );
     setFilter(false);
