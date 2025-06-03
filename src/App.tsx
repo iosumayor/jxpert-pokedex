@@ -66,26 +66,27 @@ const regions: Region[] = [
 
 const SORT_DEFAULT: string = "default";
 
-type RegionRangeItem = {
-  start: number;
-  end: number;
-};
-type Region =
-  | "kanto"
-  | "johto"
-  | "hoenn"
-  | "sinnoh"
-  | "unova"
-  | "kalos"
-  | "alola"
-  | "galar"
-  | "paldea";
+// type RegionRangeItem = {
+//   start: number;
+//   end: number;
+// };
 
-type RegionRanges = {
-  [key in Region]: RegionRangeItem;
-};
+// type Region =
+//   | "kanto"
+//   | "johto"
+//   | "hoenn"
+//   | "sinnoh"
+//   | "unova"
+//   | "kalos"
+//   | "alola"
+//   | "galar"
+//   | "paldea";
 
-const regionRanges: RegionRanges = {
+// type RegionRanges = {
+//   [key in Region]: RegionRangeItem;
+// };
+
+const regionRanges = {
   kanto: {
     start: 0,
     end: 151,
@@ -122,9 +123,9 @@ const regionRanges: RegionRanges = {
     start: 905,
     end: 1025,
   },
-};
+} as const;
 
-// type Region = keyof typeof regionRanges;
+type Region = keyof typeof regionRanges;
 
 const getCurrentRegion = (region: Region) => {
   if (regions.includes(region)) {
