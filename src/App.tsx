@@ -137,6 +137,18 @@ export const App = () => {
   const [showSort, setShowSort] = useState<boolean>(false);
   const [sort, setSort] = useState<Sort>("default");
 
+  const getCurrentRegion = () => {
+    let regionStart: number, regionEnd: number;
+    if (!regions.includes(region)) {
+      regionStart = regionRanges.kanto.start;
+      regionEnd = regionRanges.kanto.end;
+    } else {
+      regionStart = regionRanges[region].start;
+      regionEnd = regionRanges[region].end;
+    }
+    return { regionStart, regionEnd };
+  };
+
   useEffect(() => {
     /**
      *  Pokemon data loading and loading state management
@@ -145,14 +157,8 @@ export const App = () => {
       setLoading(true);
       setFilter(true);
 
-      let regionStart: number, regionEnd: number;
-      if (!regions.includes(region)) {
-        regionStart = regionRanges.kanto.start;
-        regionEnd = regionRanges.kanto.end;
-      } else {
-        regionStart = regionRanges[region].start;
-        regionEnd = regionRanges[region].end;
-      }
+      const { regionStart, regionEnd } = getCurrentRegion();
+
       const { results }: any = await fetch(
         `https://pokeapi.co/api/v2/pokemon?offset=${regionStart}&limit=${regionEnd}`,
       ).then((apiPokemonList) => apiPokemonList.json());
