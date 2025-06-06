@@ -19,14 +19,18 @@ import steel from "./assets/steel.svg";
 import water from "./assets/water.svg";
 import pokeball from "./assets/pokeball.svg";
 
-type Sort =
-  | "default"
-  | "hp"
-  | "attack"
-  | "defense"
-  | "special-attack"
-  | "special-defense"
-  | "speed";
+const SORT_DEFAULT = "default";
+const SORT_ITEMS = [
+  "default",
+  "hp",
+  "attack",
+  "defense",
+  "special-attack",
+  "special-defense",
+  "speed",
+] as const;
+
+type SortItem = (typeof SORT_ITEMS)[number];
 
 type Icons = {
   [key: string]: string;
@@ -52,7 +56,7 @@ const icons: Icons = {
   water,
 };
 
-const regions: Region[] = [
+const REGIONS = [
   "kanto",
   "johto",
   "hoenn",
@@ -62,31 +66,16 @@ const regions: Region[] = [
   "alola",
   "galar",
   "paldea",
-];
+] as const;
 
-const SORT_DEFAULT: string = "default";
+type Region = (typeof REGIONS)[number];
 
 type RegionRangeItem = {
   start: number;
   end: number;
 };
 
-// type Region =
-//   | "kanto"
-//   | "johto"
-//   | "hoenn"
-//   | "sinnoh"
-//   | "unova"
-//   | "kalos"
-//   | "alola"
-//   | "galar"
-//   | "paldea";
-
-// type RegionRanges = {
-//   [key in Region]: RegionRangeItem;
-// };
-
-const regionRanges: Record<string, RegionRangeItem> = {
+const regionRanges: Record<Region, RegionRangeItem> = {
   kanto: {
     start: 0,
     end: 151,
@@ -125,10 +114,8 @@ const regionRanges: Record<string, RegionRangeItem> = {
   },
 } as const;
 
-type Region = keyof typeof regionRanges;
-
 const getCurrentRegion = (region: Region) => {
-  if (regions.includes(region)) {
+  if (REGIONS.includes(region)) {
     return regionRanges[region];
   }
 
@@ -158,7 +145,7 @@ export const App = () => {
   const [region, setRegion] = useState<Region>("kanto");
   const [showRegions, setShowRegions] = useState<boolean>(false);
   const [showSort, setShowSort] = useState<boolean>(false);
-  const [sort, setSort] = useState<Sort>("default");
+  const [sort, setSort] = useState<SortItem>("default");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -311,7 +298,7 @@ export const App = () => {
               hidden={!showRegions}
               className={`dropdown__list ${!showRegions ? "hide" : ""}`}
             >
-              {regions.map((key) => (
+              {REGIONS.map((key) => (
                 <li
                   key={key}
                   role="radio"
@@ -395,6 +382,28 @@ export const App = () => {
                   {" "}
                   Default
                 </span>
+
+                {/* {sortItems.map((sortItem))  <span
+                  role="radio"
+                  aria-label="Default"
+                  tabIndex={0}
+                  className={`sort__pill ${sort === SORT_DEFAULT ? "active" : ""}`}
+                  aria-checked={sort === SORT_DEFAULT}
+                  onClick={() => {
+                    setSort("default");
+                    setShowSort(false);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      setSort("default");
+                      setShowSort(false);
+                    }
+                  }}
+                >
+                  {" "}
+                  Default
+                </span>} */}
+
                 <span
                   role="radio"
                   aria-label="Health points"
