@@ -20,15 +20,36 @@ import water from "./assets/water.svg";
 import pokeball from "./assets/pokeball.svg";
 
 const SORT_DEFAULT = "default";
-const SORT_ITEMS = [
-  "default",
-  "hp",
-  "attack",
-  "defense",
-  "special-attack",
-  "special-defense",
-  "speed",
-] as const;
+const SORT_ITEMS = {
+  default: {
+    aria: "Default",
+    text: "Default",
+  },
+  hp: {
+    aria: "Health points",
+    text: "Hp",
+  },
+  attack: {
+    aria: "Attack",
+    text: "At",
+  },
+  defense: {
+    aria: "Defense",
+    text: "Df",
+  },
+  "special-attack": {
+    aria: "Special attack",
+    text: "SpA",
+  },
+  "special-defense": {
+    aria: "Special defense",
+    text: "SpD",
+  },
+  speed: {
+    aria: "Speed",
+    text: "Spd",
+  },
+} as const;
 
 type SortItem = (typeof SORT_ITEMS)[number];
 
@@ -362,170 +383,29 @@ export const App = () => {
             <article className="sort__wrapper">
               <h3 className="sort__title">Sort by</h3>
               <div className="sort__items" role="listbox" id="sort-list">
-                <span
-                  role="radio"
-                  aria-label="Default"
-                  tabIndex={0}
-                  className={`sort__pill ${sort === SORT_DEFAULT ? "active" : ""}`}
-                  aria-checked={sort === SORT_DEFAULT}
-                  onClick={() => {
-                    setSort("default");
-                    setShowSort(false);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("default");
+                {Object.keys(SORT_ITEMS).map((key) => (
+                  <span
+                    key={key}
+                    role="radio"
+                    aria-label={SORT_ITEMS[key].aria}
+                    tabIndex={0}
+                    className={`sort__pill ${sort === key ? "active" : ""}`}
+                    aria-checked={sort === key}
+                    onClick={() => {
+                      setSort(key);
                       setShowSort(false);
-                    }
-                  }}
-                >
-                  {" "}
-                  Default
-                </span>
-
-                {/* {sortItems.map((sortItem))  <span
-                  role="radio"
-                  aria-label="Default"
-                  tabIndex={0}
-                  className={`sort__pill ${sort === SORT_DEFAULT ? "active" : ""}`}
-                  aria-checked={sort === SORT_DEFAULT}
-                  onClick={() => {
-                    setSort("default");
-                    setShowSort(false);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("default");
-                      setShowSort(false);
-                    }
-                  }}
-                >
-                  {" "}
-                  Default
-                </span>} */}
-
-                <span
-                  role="radio"
-                  aria-label="Health points"
-                  tabIndex={0}
-                  className={`sort__pill ${sort === "hp" ? "active" : ""}`}
-                  aria-checked={sort === "hp"}
-                  onClick={() => {
-                    setSort("hp");
-                    setShowSort(false);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("hp");
-                      setShowSort(false);
-                    }
-                  }}
-                >
-                  {" "}
-                  Hp
-                </span>
-                <span
-                  role="radio"
-                  aria-label="Attack"
-                  tabIndex={0}
-                  className={`sort__pill ${sort === "attack" ? "active" : ""}`}
-                  aria-checked={sort === "attack"}
-                  onClick={() => {
-                    setSort("attack");
-                    setShowSort(false);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("attack");
-                      setShowSort(false);
-                    }
-                  }}
-                >
-                  {" "}
-                  At
-                </span>
-                <span
-                  role="radio"
-                  aria-label="Defense"
-                  tabIndex={0}
-                  className={`sort__pill ${sort === "defense" ? "active" : ""}`}
-                  aria-checked={sort === "defense"}
-                  onClick={() => {
-                    setSort("defense");
-                    setShowSort(false);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("defense");
-                      setShowSort(false);
-                    }
-                  }}
-                >
-                  Df
-                </span>
-                <span
-                  role="radio"
-                  aria-label="Special attack"
-                  tabIndex={0}
-                  className={`sort__pill ${
-                    sort === "special-attack" ? "active" : ""
-                  }`}
-                  aria-checked={sort === "special-attack"}
-                  onClick={() => {
-                    setSort("special-attack");
-                    setShowSort(false);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("special-attack");
-                      setShowSort(false);
-                    }
-                  }}
-                >
-                  {" "}
-                  SpA
-                </span>
-                <span
-                  role="radio"
-                  aria-label="Special defense"
-                  tabIndex={0}
-                  className={`sort__pill ${
-                    sort === "special-defense" ? "active" : ""
-                  }`}
-                  aria-checked={sort === "special-defense"}
-                  onClick={() => {
-                    setSort("special-defense");
-                    setShowSort(false);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("special-defense");
-                      setShowSort(false);
-                    }
-                  }}
-                >
-                  SpD
-                </span>
-                <span
-                  role="radio"
-                  aria-label="Speed"
-                  tabIndex={0}
-                  className={`sort__pill ${sort === "speed" ? "active" : ""}`}
-                  aria-checked={sort === "speed"}
-                  onClick={() => {
-                    setSort("speed");
-                    setShowSort(false);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("speed");
-                      setShowSort(false);
-                    }
-                  }}
-                >
-                  {" "}
-                  Spd
-                </span>
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        setSort(key);
+                        setShowSort(false);
+                      }
+                    }}
+                  >
+                    {" "}
+                    {SORT_ITEMS[key].text}
+                  </span>
+                ))}
               </div>
             </article>
           )}
@@ -591,84 +471,30 @@ export const App = () => {
                       <section className="card__content">
                         <h3 className="card__title">{res.name}</h3>
                         <ul aria-description="Stats resume">
-                          <li className="card__stat" aria-label="Health points">
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                Hp
-                              </p>
-                              <p>{res.stats[0].base_stat}</p>
-                            </div>
-                            <progress
-                              value={res.stats[0].base_stat}
-                              max="255"
-                            ></progress>
-                          </li>
-                          <li className="card__stat" aria-label="Attack">
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                At
-                              </p>
-                              <p>{res.stats[1].base_stat}</p>
-                            </div>
-                            <progress
-                              value={res.stats[1].base_stat}
-                              max="255"
-                            ></progress>
-                          </li>
-                          <li className="card__stat" aria-label="Defense">
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                Df
-                              </p>
-                              <p>{res.stats[2].base_stat}</p>
-                            </div>
-                            <progress
-                              value={res.stats[2].base_stat}
-                              max="255"
-                            ></progress>
-                          </li>
-                          <li
-                            className="card__stat"
-                            aria-label="Special attack"
-                          >
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                SpA
-                              </p>
-                              <p>{res.stats[3].base_stat}</p>
-                            </div>
-                            <progress
-                              value={res.stats[3].base_stat}
-                              max="255"
-                            ></progress>
-                          </li>
-                          <li
-                            className="card__stat"
-                            aria-label="Special defense"
-                          >
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                SpD
-                              </p>
-                              <p>{res.stats[4].base_stat}</p>
-                            </div>
-                            <progress
-                              value={res.stats[4].base_stat}
-                              max="255"
-                            ></progress>
-                          </li>
-                          <li className="card__stat" aria-label="Speed">
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                Spd
-                              </p>
-                              <p>{res.stats[5].base_stat}</p>
-                            </div>
-                            <progress
-                              value={res.stats[5].base_stat}
-                              max="255"
-                            ></progress>
-                          </li>
+                          {Object.keys(SORT_ITEMS)
+                            .slice(1)
+                            .map((key, index) => (
+                              <>
+                                <li
+                                  className="card__stat"
+                                  aria-label="Health points"
+                                >
+                                  <div className="stat__value">
+                                    <p
+                                      className="stat__name"
+                                      aria-hidden="true"
+                                    >
+                                      {SORT_ITEMS[key].text}
+                                    </p>
+                                    <p>{res.stats[index].base_stat}</p>
+                                  </div>
+                                  <progress
+                                    value={res.stats[index].base_stat}
+                                    max="255"
+                                  ></progress>
+                                </li>
+                              </>
+                            ))}
                         </ul>
                       </section>
                     </article>
