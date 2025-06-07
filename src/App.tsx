@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Card } from "./components/Card";
 import bug from "./assets/bug.svg";
 import dark from "./assets/dark.svg";
 import dragon from "./assets/dragon.svg";
@@ -51,12 +52,16 @@ const SORT_ITEMS = {
   },
 } as const;
 
+export const STAT_NAMES = ["Hp", "At", "Df", "SpA", "SpD", "Spd"] as const;
+
+// type Stat = (typeof STAT_NAMES)[number]
+
 type SortItem = (typeof SORT_ITEMS)[number];
 
 type Icons = {
   [key: string]: string;
 };
-const icons: Icons = {
+export const icons: Icons = {
   bug,
   dark,
   dragon,
@@ -434,70 +439,9 @@ export const App = () => {
           {!filter && !loading && filteredPokemons.length > 0 && (
             <ul className="grid" data-testid="grid">
               {filteredPokemons.map((res) => {
-                const customStyles: any = {
-                  "--color-type": `var(--color-${res.types[0].type.name}`,
-                };
-
                 return (
                   <li key={`pokemon-card-${res.id}`}>
-                    <article className="card" style={customStyles}>
-                      <header className="card__head">
-                        <div className="card__tag">
-                          <p>#{res.id.toString().padStart(3, "0")}</p>
-                        </div>
-                        <div className="card__tag">
-                          <img
-                            src={icons[res.types[0].type.name]}
-                            className="card__type"
-                            alt={`${res.types[0].type.name} primary type`}
-                          />
-                          {res.types[1] && (
-                            <img
-                              src={icons[res.types[1].type.name]}
-                              className="card__type"
-                              alt={`${res.types[1].type.name} secondary type`}
-                            />
-                          )}
-                        </div>
-                      </header>
-                      <img
-                        className="card__avatar"
-                        src={
-                          res.sprites.other["official-artwork"].front_default
-                        }
-                        loading="lazy"
-                        alt={`${res.name} artwork`}
-                      />
-                      <section className="card__content">
-                        <h3 className="card__title">{res.name}</h3>
-                        <ul aria-description="Stats resume">
-                          {Object.keys(SORT_ITEMS)
-                            .slice(1)
-                            .map((key, index) => (
-                              <>
-                                <li
-                                  className="card__stat"
-                                  aria-label="Health points"
-                                >
-                                  <div className="stat__value">
-                                    <p
-                                      className="stat__name"
-                                      aria-hidden="true"
-                                    >
-                                      {SORT_ITEMS[key].text}
-                                    </p>
-                                    <p>{res.stats[index].base_stat}</p>
-                                  </div>
-                                  <progress
-                                    value={res.stats[index].base_stat}
-                                    max="255"
-                                  ></progress>
-                                </li>
-                              </>
-                            ))}
-                        </ul>
-                      </section>
-                    </article>
+                    <Card pokemon={res} />
                   </li>
                 );
               })}
