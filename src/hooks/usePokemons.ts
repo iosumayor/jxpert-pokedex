@@ -23,13 +23,7 @@ export const usePokemons = () => {
   const getPokemonsData = async (region: Region) => {
     const { start, end } = getCurrentRegion(region);
     const { results }: any = await pokemonService.getAllPokemons(start, end);
-    console.log(results);
-    const pokemonsData = await Promise.all(
-      results.map(
-        async ({ url }) =>
-          await fetch(url).then((apiPokemonDetail) => apiPokemonDetail.json()),
-      ),
-    );
+    const pokemonsData = await pokemonService.getPokemonDetail(results);
     return pokemonsData;
   };
 
