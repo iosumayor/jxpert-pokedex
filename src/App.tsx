@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Region, REGIONS } from "./constants/region";
 import { Card } from "./components/Card";
 import bug from "./assets/bug.svg";
 import dark from "./assets/dark.svg";
@@ -82,20 +83,6 @@ export const icons: Icons = {
   steel,
   water,
 };
-
-const REGIONS = [
-  "kanto",
-  "johto",
-  "hoenn",
-  "sinnoh",
-  "unova",
-  "kalos",
-  "alola",
-  "galar",
-  "paldea",
-] as const;
-
-type Region = (typeof REGIONS)[number];
 
 export const App = () => {
   const [loading, setLoading] = useState<boolean>(false);

@@ -1,16 +1,4 @@
-const REGIONS = [
-  "kanto",
-  "johto",
-  "hoenn",
-  "sinnoh",
-  "unova",
-  "kalos",
-  "alola",
-  "galar",
-  "paldea",
-] as const;
-
-type Region = (typeof REGIONS)[number];
+import { Region, REGIONS } from "../constants/region";
 
 type RegionRangeItem = {
   start: number;
