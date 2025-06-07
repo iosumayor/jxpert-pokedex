@@ -1,94 +1,15 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { SORT_ITEMS } from "./constants/sortProperties";
 import { REGIONS } from "./constants/region";
 import { Card } from "./components/Card";
-import bug from "./assets/bug.svg";
-import dark from "./assets/dark.svg";
-import dragon from "./assets/dragon.svg";
-import electric from "./assets/electric.svg";
-import fairy from "./assets/fairy.svg";
-import fighting from "./assets/fighting.svg";
-import fire from "./assets/fire.svg";
-import flying from "./assets/flying.svg";
-import ghost from "./assets/ghost.svg";
-import grass from "./assets/grass.svg";
-import ground from "./assets/ground.svg";
-import ice from "./assets/ice.svg";
-import normal from "./assets/normal.svg";
-import poison from "./assets/poison.svg";
-import psychic from "./assets/psychic.svg";
-import rock from "./assets/rock.svg";
-import steel from "./assets/steel.svg";
-import water from "./assets/water.svg";
 import pokeball from "./assets/pokeball.svg";
 import { usePokemons } from "./hooks/usePokemons";
 import { useFilter } from "./hooks/useFilter";
-
-const SORT_DEFAULT = "default";
-const SORT_ITEMS = {
-  default: {
-    aria: "Default",
-    text: "Default",
-  },
-  hp: {
-    aria: "Health points",
-    text: "Hp",
-  },
-  attack: {
-    aria: "Attack",
-    text: "At",
-  },
-  defense: {
-    aria: "Defense",
-    text: "Df",
-  },
-  "special-attack": {
-    aria: "Special attack",
-    text: "SpA",
-  },
-  "special-defense": {
-    aria: "Special defense",
-    text: "SpD",
-  },
-  speed: {
-    aria: "Speed",
-    text: "Spd",
-  },
-} as const;
-
-export const STAT_NAMES = ["Hp", "At", "Df", "SpA", "SpD", "Spd"] as const;
-
-// type Stat = (typeof STAT_NAMES)[number]
-
-type SortItem = (typeof SORT_ITEMS)[number];
-
-type Icons = {
-  [key: string]: string;
-};
-export const icons: Icons = {
-  bug,
-  dark,
-  dragon,
-  electric,
-  fairy,
-  fighting,
-  fire,
-  flying,
-  ghost,
-  grass,
-  ground,
-  ice,
-  normal,
-  poison,
-  psychic,
-  rock,
-  steel,
-  water,
-};
+import { useSortByProperty } from "./hooks/useSortByProperty";
 
 export const App = () => {
   const [showRegions, setShowRegions] = useState<boolean>(false);
   const [showSort, setShowSort] = useState<boolean>(false);
-  const [sort, setSort] = useState<SortItem>("default");
 
   const {
     pokemons,
@@ -106,34 +27,11 @@ export const App = () => {
     setFilter,
     pokemons,
   );
-  /**
-   * Sorts results based on selected sorting criteria.
-   */
-  const sortByProperty = (property: string) => {
-    setFilteredPokemons((previous) =>
-      [...previous].sort((pokemon1, pokemon2) => {
-        const pokemon1Stat = pokemon1.stats.find(
-          (stat) => stat.stat.name === property,
-        );
-        const pokemon2Stat = pokemon2.stats.find(
-          (stat) => stat.stat.name === property,
-        );
-        return pokemon2Stat.base_stat - pokemon1Stat.base_stat;
-      }),
-    );
-  };
 
-  useEffect(() => {
-    if (sort === SORT_DEFAULT) {
-      setFilteredPokemons((previous) =>
-        [...previous].sort((a, b) => {
-          return a.id - b.id;
-        }),
-      );
-      return;
-    }
-    sortByProperty(sort);
-  }, [filteredPokemons[0]?.id, sort]);
+  const { setSort, sort } = useSortByProperty(
+    setFilteredPokemons,
+    filteredPokemons,
+  );
 
   return (
     <div className="layout">

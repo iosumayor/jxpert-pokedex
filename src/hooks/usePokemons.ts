@@ -7,6 +7,7 @@ export const usePokemons = () => {
   const [filter, setFilter] = useState<boolean>(false);
   const [filteredPokemons, setFilteredPokemons] = useState<any>([]);
   const [region, setRegion] = useState<Region>("kanto");
+
   const getCurrentRegion = (region: Region) => {
     if (REGIONS.includes(region)) {
       return regionRanges[region];
