@@ -4,34 +4,22 @@ import { REGIONS } from "./constants/region";
 import { Card } from "./components/Card";
 import pokeball from "./assets/pokeball.svg";
 import { usePokemons } from "./hooks/usePokemons";
-import { useFilter } from "./hooks/useFilter";
-import { useSortByProperty } from "./hooks/useSortByProperty";
 
 export const App = () => {
   const [showRegions, setShowRegions] = useState<boolean>(false);
   const [showSort, setShowSort] = useState<boolean>(false);
 
   const {
-    pokemons,
     loading,
     filter,
     filteredPokemons,
     region,
     setRegion,
-    setFilter,
-    setFilteredPokemons,
+    setSort,
+    sort,
+    setSearch,
+    search,
   } = usePokemons();
-
-  const { setSearch, search } = useFilter(
-    setFilteredPokemons,
-    setFilter,
-    pokemons,
-  );
-
-  const { setSort, sort } = useSortByProperty(
-    setFilteredPokemons,
-    filteredPokemons,
-  );
 
   return (
     <div className="layout">
