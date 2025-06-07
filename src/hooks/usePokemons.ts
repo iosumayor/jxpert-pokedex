@@ -1,6 +1,12 @@
 import { Region, REGIONS, regionRanges } from "../constants/region";
+import { useEffect, useState } from "react";
 
 export const usePokemons = () => {
+  const [pokemons, setPokemons] = useState<any>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [filter, setFilter] = useState<boolean>(false);
+  const [filteredPokemons, setFilteredPokemons] = useState<any>([]);
+  const [region, setRegion] = useState<Region>("kanto");
   const getCurrentRegion = (region: Region) => {
     if (REGIONS.includes(region)) {
       return regionRanges[region];
@@ -22,7 +28,29 @@ export const usePokemons = () => {
     );
     return pokemonsData;
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      setFilter(true);
+
+      const pokemonsData = await getPokemonsData(region);
+
+      setPokemons(pokemonsData);
+      setFilteredPokemons(pokemonsData);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [region]);
   return {
-    getPokemonsData,
+    pokemons,
+    loading,
+    filter,
+    filteredPokemons,
+    region,
+    setRegion,
+    setFilter,
+    setFilteredPokemons,
   };
 };

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Region, REGIONS } from "./constants/region";
+import { REGIONS } from "./constants/region";
 import { Card } from "./components/Card";
 import bug from "./assets/bug.svg";
 import dark from "./assets/dark.svg";
@@ -85,32 +85,21 @@ export const icons: Icons = {
 };
 
 export const App = () => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [filter, setFilter] = useState<boolean>(false);
-  const [pokemons, setPokemons] = useState<any>([]);
-  const [filteredPokemons, setFilteredPokemons] = useState<any>([]);
   const [search, setSearch] = useState<string>("");
-  const [region, setRegion] = useState<Region>("kanto");
   const [showRegions, setShowRegions] = useState<boolean>(false);
   const [showSort, setShowSort] = useState<boolean>(false);
   const [sort, setSort] = useState<SortItem>("default");
 
-  const { getPokemonsData } = usePokemons();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setFilter(true);
-
-      const pokemonsData = await getPokemonsData(region);
-
-      setPokemons(pokemonsData);
-      setFilteredPokemons(pokemonsData);
-      setLoading(false);
-    };
-
-    fetchData();
-  }, [region]);
+  const {
+    pokemons,
+    loading,
+    filter,
+    filteredPokemons,
+    region,
+    setRegion,
+    setFilter,
+    setFilteredPokemons,
+  } = usePokemons();
 
   /**
    * Filters results based on input query term.
