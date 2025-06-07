@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Card } from "./components/Card";
 import bug from "./assets/bug.svg";
 import dark from "./assets/dark.svg";
 import dragon from "./assets/dragon.svg";
@@ -19,19 +20,48 @@ import steel from "./assets/steel.svg";
 import water from "./assets/water.svg";
 import pokeball from "./assets/pokeball.svg";
 
-type Sort =
-  | "default"
-  | "hp"
-  | "attack"
-  | "defense"
-  | "special-attack"
-  | "special-defense"
-  | "speed";
+const SORT_DEFAULT = "default";
+const SORT_ITEMS = {
+  default: {
+    aria: "Default",
+    text: "Default",
+  },
+  hp: {
+    aria: "Health points",
+    text: "Hp",
+  },
+  attack: {
+    aria: "Attack",
+    text: "At",
+  },
+  defense: {
+    aria: "Defense",
+    text: "Df",
+  },
+  "special-attack": {
+    aria: "Special attack",
+    text: "SpA",
+  },
+  "special-defense": {
+    aria: "Special defense",
+    text: "SpD",
+  },
+  speed: {
+    aria: "Speed",
+    text: "Spd",
+  },
+} as const;
+
+export const STAT_NAMES = ["Hp", "At", "Df", "SpA", "SpD", "Spd"] as const;
+
+// type Stat = (typeof STAT_NAMES)[number]
+
+type SortItem = (typeof SORT_ITEMS)[number];
 
 type Icons = {
   [key: string]: string;
 };
-const icons: Icons = {
+export const icons: Icons = {
   bug,
   dark,
   dragon,
@@ -52,7 +82,7 @@ const icons: Icons = {
   water,
 };
 
-const regions: Region[] = [
+const REGIONS = [
   "kanto",
   "johto",
   "hoenn",
@@ -62,30 +92,16 @@ const regions: Region[] = [
   "alola",
   "galar",
   "paldea",
-];
+] as const;
 
-const SORT_DEFAULT: string = "default";
+type Region = (typeof REGIONS)[number];
 
 type RegionRangeItem = {
   start: number;
   end: number;
 };
-type Region =
-  | "kanto"
-  | "johto"
-  | "hoenn"
-  | "sinnoh"
-  | "unova"
-  | "kalos"
-  | "alola"
-  | "galar"
-  | "paldea";
 
-type RegionRanges = {
-  [key in Region]: RegionRangeItem;
-};
-
-const regionRanges: RegionRanges = {
+const regionRanges: Record<Region, RegionRangeItem> = {
   kanto: {
     start: 0,
     end: 151,
@@ -122,9 +138,29 @@ const regionRanges: RegionRanges = {
     start: 905,
     end: 1025,
   },
+} as const;
+
+const getCurrentRegion = (region: Region) => {
+  if (REGIONS.includes(region)) {
+    return regionRanges[region];
+  }
+
+  return regionRanges.kanto;
 };
 
-// type Region = keyof typeof regionRanges;
+const getPokemonsData = async (region: Region) => {
+  const { start, end } = getCurrentRegion(region);
+  const { results }: any = await fetch(
+    `https://pokeapi.co/api/v2/pokemon?offset=${start}&limit=${end}`,
+  ).then((apiPokemonList) => apiPokemonList.json());
+  const pokemonsData = await Promise.all(
+    results.map(
+      async ({ url }) =>
+        await fetch(url).then((apiPokemonDetail) => apiPokemonDetail.json()),
+    ),
+  );
+  return pokemonsData;
+};
 
 export const App = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -135,52 +171,40 @@ export const App = () => {
   const [region, setRegion] = useState<Region>("kanto");
   const [showRegions, setShowRegions] = useState<boolean>(false);
   const [showSort, setShowSort] = useState<boolean>(false);
-  const [sort, setSort] = useState<Sort>("default");
+  const [sort, setSort] = useState<SortItem>("default");
 
   useEffect(() => {
-    /**
-     *  Pokemon data loading and loading state management
-     */
-    const getPokemonsData = async () => {
+    const fetchData = async () => {
       setLoading(true);
       setFilter(true);
 
-      let regionStart: number, regionEnd: number;
-      if (!regions.includes(region)) {
-        regionStart = regionRanges.kanto.start;
-        regionEnd = regionRanges.kanto.end;
-      } else {
-        regionStart = regionRanges[region].start;
-        regionEnd = regionRanges[region].end;
-      }
-      const { results }: any = await fetch(
-        `https://pokeapi.co/api/v2/pokemon?offset=${regionStart}&limit=${regionEnd}`,
-      ).then((apiPokemonList) => apiPokemonList.json());
-      const pokemonsData = await Promise.all(
-        results.map(
-          async ({ url }) =>
-            await fetch(url).then((apiPokemonDetail) =>
-              apiPokemonDetail.json(),
-            ),
-        ),
-      );
+      const pokemonsData = await getPokemonsData(region);
+
       setPokemons(pokemonsData);
       setFilteredPokemons(pokemonsData);
       setLoading(false);
     };
-    getPokemonsData();
+
+    fetchData();
   }, [region]);
+
   /**
    * Filters results based on input query term.
    */
+  const findByName = (pokemon) => {
+    return pokemon.name.toLowerCase().includes(search.toLowerCase());
+  };
+
+  const findByType = (pokemon) => {
+    return pokemon.types.find((type) =>
+      type.type.name.startsWith(search.toLowerCase()),
+    );
+  };
+
   useEffect(() => {
     setFilteredPokemons(
       pokemons.filter(
-        (pokemon) =>
-          pokemon.name.includes(search.toLowerCase()) ||
-          !!pokemon.types.find((type) =>
-            type.type.name.startsWith(search.toLowerCase()),
-          ),
+        (pokemon) => findByName(pokemon) || !!findByType(pokemon),
       ),
     );
     setFilter(false);
@@ -300,7 +324,7 @@ export const App = () => {
               hidden={!showRegions}
               className={`dropdown__list ${!showRegions ? "hide" : ""}`}
             >
-              {regions.map((key) => (
+              {REGIONS.map((key) => (
                 <li
                   key={key}
                   role="radio"
@@ -364,148 +388,29 @@ export const App = () => {
             <article className="sort__wrapper">
               <h3 className="sort__title">Sort by</h3>
               <div className="sort__items" role="listbox" id="sort-list">
-                <span
-                  role="radio"
-                  aria-label="Default"
-                  tabIndex={0}
-                  className={`sort__pill ${sort === SORT_DEFAULT ? "active" : ""}`}
-                  aria-checked={sort === SORT_DEFAULT}
-                  onClick={() => {
-                    setSort("default");
-                    setShowSort(false);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("default");
+                {Object.keys(SORT_ITEMS).map((key) => (
+                  <span
+                    key={key}
+                    role="radio"
+                    aria-label={SORT_ITEMS[key].aria}
+                    tabIndex={0}
+                    className={`sort__pill ${sort === key ? "active" : ""}`}
+                    aria-checked={sort === key}
+                    onClick={() => {
+                      setSort(key);
                       setShowSort(false);
-                    }
-                  }}
-                >
-                  {" "}
-                  Default
-                </span>
-                <span
-                  role="radio"
-                  aria-label="Health points"
-                  tabIndex={0}
-                  className={`sort__pill ${sort === "hp" ? "active" : ""}`}
-                  aria-checked={sort === "hp"}
-                  onClick={() => {
-                    setSort("hp");
-                    setShowSort(false);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("hp");
-                      setShowSort(false);
-                    }
-                  }}
-                >
-                  {" "}
-                  Hp
-                </span>
-                <span
-                  role="radio"
-                  aria-label="Attack"
-                  tabIndex={0}
-                  className={`sort__pill ${sort === "attack" ? "active" : ""}`}
-                  aria-checked={sort === "attack"}
-                  onClick={() => {
-                    setSort("attack");
-                    setShowSort(false);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("attack");
-                      setShowSort(false);
-                    }
-                  }}
-                >
-                  {" "}
-                  At
-                </span>
-                <span
-                  role="radio"
-                  aria-label="Defense"
-                  tabIndex={0}
-                  className={`sort__pill ${sort === "defense" ? "active" : ""}`}
-                  aria-checked={sort === "defense"}
-                  onClick={() => {
-                    setSort("defense");
-                    setShowSort(false);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("defense");
-                      setShowSort(false);
-                    }
-                  }}
-                >
-                  Df
-                </span>
-                <span
-                  role="radio"
-                  aria-label="Special attack"
-                  tabIndex={0}
-                  className={`sort__pill ${
-                    sort === "special-attack" ? "active" : ""
-                  }`}
-                  aria-checked={sort === "special-attack"}
-                  onClick={() => {
-                    setSort("special-attack");
-                    setShowSort(false);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("special-attack");
-                      setShowSort(false);
-                    }
-                  }}
-                >
-                  {" "}
-                  SpA
-                </span>
-                <span
-                  role="radio"
-                  aria-label="Special defense"
-                  tabIndex={0}
-                  className={`sort__pill ${
-                    sort === "special-defense" ? "active" : ""
-                  }`}
-                  aria-checked={sort === "special-defense"}
-                  onClick={() => {
-                    setSort("special-defense");
-                    setShowSort(false);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("special-defense");
-                      setShowSort(false);
-                    }
-                  }}
-                >
-                  SpD
-                </span>
-                <span
-                  role="radio"
-                  aria-label="Speed"
-                  tabIndex={0}
-                  className={`sort__pill ${sort === "speed" ? "active" : ""}`}
-                  aria-checked={sort === "speed"}
-                  onClick={() => {
-                    setSort("speed");
-                    setShowSort(false);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("speed");
-                      setShowSort(false);
-                    }
-                  }}
-                >
-                  {" "}
-                  Spd
-                </span>
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        setSort(key);
+                        setShowSort(false);
+                      }
+                    }}
+                  >
+                    {" "}
+                    {SORT_ITEMS[key].text}
+                  </span>
+                ))}
               </div>
             </article>
           )}
@@ -534,124 +439,9 @@ export const App = () => {
           {!filter && !loading && filteredPokemons.length > 0 && (
             <ul className="grid" data-testid="grid">
               {filteredPokemons.map((res) => {
-                const customStyles: any = {
-                  "--color-type": `var(--color-${res.types[0].type.name}`,
-                };
-
                 return (
                   <li key={`pokemon-card-${res.id}`}>
-                    <article className="card" style={customStyles}>
-                      <header className="card__head">
-                        <div className="card__tag">
-                          <p>#{res.id.toString().padStart(3, "0")}</p>
-                        </div>
-                        <div className="card__tag">
-                          <img
-                            src={icons[res.types[0].type.name]}
-                            className="card__type"
-                            alt={`${res.types[0].type.name} primary type`}
-                          />
-                          {res.types[1] && (
-                            <img
-                              src={icons[res.types[1].type.name]}
-                              className="card__type"
-                              alt={`${res.types[1].type.name} secondary type`}
-                            />
-                          )}
-                        </div>
-                      </header>
-                      <img
-                        className="card__avatar"
-                        src={
-                          res.sprites.other["official-artwork"].front_default
-                        }
-                        loading="lazy"
-                        alt={`${res.name} artwork`}
-                      />
-                      <section className="card__content">
-                        <h3 className="card__title">{res.name}</h3>
-                        <ul aria-description="Stats resume">
-                          <li className="card__stat" aria-label="Health points">
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                Hp
-                              </p>
-                              <p>{res.stats[0].base_stat}</p>
-                            </div>
-                            <progress
-                              value={res.stats[0].base_stat}
-                              max="255"
-                            ></progress>
-                          </li>
-                          <li className="card__stat" aria-label="Attack">
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                At
-                              </p>
-                              <p>{res.stats[1].base_stat}</p>
-                            </div>
-                            <progress
-                              value={res.stats[1].base_stat}
-                              max="255"
-                            ></progress>
-                          </li>
-                          <li className="card__stat" aria-label="Defense">
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                Df
-                              </p>
-                              <p>{res.stats[2].base_stat}</p>
-                            </div>
-                            <progress
-                              value={res.stats[2].base_stat}
-                              max="255"
-                            ></progress>
-                          </li>
-                          <li
-                            className="card__stat"
-                            aria-label="Special attack"
-                          >
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                SpA
-                              </p>
-                              <p>{res.stats[3].base_stat}</p>
-                            </div>
-                            <progress
-                              value={res.stats[3].base_stat}
-                              max="255"
-                            ></progress>
-                          </li>
-                          <li
-                            className="card__stat"
-                            aria-label="Special defense"
-                          >
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                SpD
-                              </p>
-                              <p>{res.stats[4].base_stat}</p>
-                            </div>
-                            <progress
-                              value={res.stats[4].base_stat}
-                              max="255"
-                            ></progress>
-                          </li>
-                          <li className="card__stat" aria-label="Speed">
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                Spd
-                              </p>
-                              <p>{res.stats[5].base_stat}</p>
-                            </div>
-                            <progress
-                              value={res.stats[5].base_stat}
-                              max="255"
-                            ></progress>
-                          </li>
-                        </ul>
-                      </section>
-                    </article>
+                    <Card pokemon={res} />
                   </li>
                 );
               })}
