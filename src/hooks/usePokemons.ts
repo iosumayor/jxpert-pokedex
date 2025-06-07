@@ -1,6 +1,6 @@
 import { Region, REGIONS, regionRanges } from "../constants/region";
 import { useEffect, useState } from "react";
-import { SORT_DEFAULT, SortItem } from "../constants/sortProperties";
+import { SORT_DEFAULT, Stats } from "../constants/sortProperties";
 import { pokemonService } from "../services/pokemonService";
 
 export const usePokemons = () => {
@@ -10,7 +10,7 @@ export const usePokemons = () => {
   const [filter, setFilter] = useState<boolean>(false);
   const [filteredPokemons, setFilteredPokemons] = useState<any>([]);
   const [region, setRegion] = useState<Region>("kanto");
-  const [sort, setSort] = useState<SortItem>("default");
+  const [sort, setSort] = useState<Stats>("default");
 
   const getCurrentRegion = (region: Region) => {
     if (REGIONS.includes(region)) {

@@ -1,5 +1,23 @@
+type STATS = [
+  "default",
+  "hp",
+  "attack",
+  "defense",
+  "special-attack",
+  "special-defense",
+  "speed",
+];
+
+export type Stats = STATS[number];
+
+type StatsItem = {
+  aria: string;
+  text: string;
+};
+
 export const SORT_DEFAULT = "default";
-export const SORT_ITEMS = {
+
+export const SORT_ITEMS: Record<Stats, StatsItem> = {
   default: {
     aria: "Default",
     text: "Default",
@@ -29,4 +47,3 @@ export const SORT_ITEMS = {
     text: "Spd",
   },
 } as const;
-export type SortItem = (typeof SORT_ITEMS)[number];
