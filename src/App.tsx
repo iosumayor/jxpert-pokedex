@@ -21,6 +21,7 @@ import steel from "./assets/steel.svg";
 import water from "./assets/water.svg";
 import pokeball from "./assets/pokeball.svg";
 import { usePokemons } from "./hooks/usePokemons";
+import { useFilter } from "./hooks/useFilter";
 
 const SORT_DEFAULT = "default";
 const SORT_ITEMS = {
@@ -85,7 +86,6 @@ export const icons: Icons = {
 };
 
 export const App = () => {
-  const [search, setSearch] = useState<string>("");
   const [showRegions, setShowRegions] = useState<boolean>(false);
   const [showSort, setShowSort] = useState<boolean>(false);
   const [sort, setSort] = useState<SortItem>("default");
@@ -101,27 +101,11 @@ export const App = () => {
     setFilteredPokemons,
   } = usePokemons();
 
-  /**
-   * Filters results based on input query term.
-   */
-  const findByName = (pokemon) => {
-    return pokemon.name.toLowerCase().includes(search.toLowerCase());
-  };
-
-  const findByType = (pokemon) => {
-    return pokemon.types.find((type) =>
-      type.type.name.startsWith(search.toLowerCase()),
-    );
-  };
-
-  useEffect(() => {
-    setFilteredPokemons(
-      pokemons.filter(
-        (pokemon) => findByName(pokemon) || !!findByType(pokemon),
-      ),
-    );
-    setFilter(false);
-  }, [pokemons[0]?.id, search]);
+  const { setSearch, search } = useFilter(
+    setFilteredPokemons,
+    setFilter,
+    pokemons,
+  );
   /**
    * Sorts results based on selected sorting criteria.
    */
