@@ -1,6 +1,7 @@
 import { Region, REGIONS, regionRanges } from "../constants/region";
 import { useEffect, useState } from "react";
 import { SORT_DEFAULT, SortItem } from "../constants/sortProperties";
+import { pokemonService } from "../services/pokemonService";
 
 export const usePokemons = () => {
   const [search, setSearch] = useState<string>("");
@@ -21,9 +22,8 @@ export const usePokemons = () => {
 
   const getPokemonsData = async (region: Region) => {
     const { start, end } = getCurrentRegion(region);
-    const { results }: any = await fetch(
-      `https://pokeapi.co/api/v2/pokemon?offset=${start}&limit=${end}`,
-    ).then((apiPokemonList) => apiPokemonList.json());
+    const { results }: any = await pokemonService.getAllPokemons(start, end);
+    console.log(results);
     const pokemonsData = await Promise.all(
       results.map(
         async ({ url }) =>
