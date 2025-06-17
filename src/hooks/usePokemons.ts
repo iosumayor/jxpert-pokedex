@@ -1,7 +1,8 @@
 import { Region, REGIONS, regionRanges } from "../constants/region";
 import { useEffect, useState } from "react";
 import { SORT_DEFAULT, Stats } from "../constants/sortProperties";
-import { pokemonService } from "../services/pokemonService";
+import { PokemonService } from "../core/services/pokemonService";
+import { ApiPokemonRepository } from "../core/infrastructure/ApiPokemonRepository";
 
 export const usePokemons = () => {
   const [search, setSearch] = useState<string>("");
@@ -20,11 +21,11 @@ export const usePokemons = () => {
     return regionRanges.kanto;
   };
 
-  const getPokemonsData = async (region: Region) => {
+  const getPokemons = async (region: Region) => {
     const { start, end } = getCurrentRegion(region);
-    const { results }: any = await pokemonService.getAllPokemons(start, end);
-    const pokemonsData = await pokemonService.getPokemonDetail(results);
-    return pokemonsData;
+    const newPokemonService = new PokemonService(ApiPokemonRepository);
+    const pokemons = newPokemonService.getPokemonData(start, end);
+    return pokemons;
   };
 
   useEffect(() => {
@@ -32,7 +33,7 @@ export const usePokemons = () => {
       setLoading(true);
       setFilter(true);
 
-      const pokemonsData = await getPokemonsData(region);
+      const pokemonsData = await getPokemons(region);
 
       setPokemons(pokemonsData);
       setFilteredPokemons(pokemonsData);

@@ -1,14 +1,14 @@
-interface Pokemon {
-  name: string;
-  url: string;
-}
+import { PokemonRepository } from "../domain/PokemonRepository";
 
-type PokemonList = Pokemon[];
+export const ApiPokemonRepository: PokemonRepository = {
+  getPokemonData: async (start: number, end: number) => {
+    const { results }: any = await getAllPokemons(start, end);
+    const pokemonsData = await getPokemonDetail(results);
+    return pokemonsData;
+  },
+};
 
-const getAllPokemons = async (
-  start: number,
-  end: number,
-): Promise<PokemonList> => {
+const getAllPokemons = async (start: number, end: number) => {
   const res = await fetch(
     `https://pokeapi.co/api/v2/pokemon?offset=${start}&limit=${end}`,
   ).then((apiPokemonList) => apiPokemonList.json());
@@ -19,8 +19,7 @@ const getAllPokemons = async (
 
   return res;
 };
-
-const getPokemonDetail = async (allPokemons): Promise<any> => {
+const getPokemonDetail = async (allPokemons) => {
   const res = await Promise.all(
     allPokemons.map(
       async ({ url }) =>
@@ -33,9 +32,4 @@ const getPokemonDetail = async (allPokemons): Promise<any> => {
   }
 
   return res;
-};
-
-export const pokemonService = {
-  getAllPokemons,
-  getPokemonDetail,
 };
