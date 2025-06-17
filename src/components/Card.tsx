@@ -16,6 +16,7 @@ import psychic from "../assets/psychic.svg";
 import rock from "../assets/rock.svg";
 import steel from "../assets/steel.svg";
 import water from "../assets/water.svg";
+import { Pokemon } from "../core/domain/Pokemon";
 
 type Icons = {
   [key: string]: string;
@@ -45,9 +46,9 @@ const STAT_NAMES = ["Hp", "At", "Df", "SpA", "SpD", "Spd"] as const;
 
 // type Stat = (typeof STAT_NAMES)[number]
 
-export const Card = ({ pokemon }: { pokemon: any }) => {
+export const Card = ({ pokemon }: { pokemon: Pokemon }) => {
   const customStyles: any = {
-    "--color-type": `var(--color-${pokemon.types[0].type.name}`,
+    "--color-type": `var(--color-${pokemon.types[0]}`,
   };
 
   return (
@@ -58,41 +59,38 @@ export const Card = ({ pokemon }: { pokemon: any }) => {
         </div>
         <div className="card__tag">
           <img
-            src={icons[pokemon.types[0].type.name]}
+            src={icons[pokemon.types[0].bug]}
             className="card__type"
-            alt={`${pokemon.types[0].type.name} primary type`}
+            alt={`${pokemon.types[0]} primary type`}
           />
           {pokemon.types[1] && (
             <img
-              src={icons[pokemon.types[1].type.name]}
+              src={icons[pokemon.types[1].fighting]}
               className="card__type"
-              alt={`${pokemon.types[1].type.name} secondary type`}
+              alt={`${pokemon.types[1]} secondary type`}
             />
           )}
         </div>
       </header>
       <img
         className="card__avatar"
-        src={pokemon.sprites.other["official-artwork"].front_default}
+        src={pokemon.image}
         loading="lazy"
         alt={`${pokemon.name} artwork`}
       />
       <section className="card__content">
         <h3 className="card__title">{pokemon.name}</h3>
         <ul aria-description="Stats resume">
-          {STAT_NAMES.map((key, index) => (
+          {Object.keys(pokemon.stats).map((key, index) => (
             <>
               <li className="card__stat" aria-label="Health points">
                 <div className="stat__value">
                   <p className="stat__name" aria-hidden="true">
-                    {key}
+                    {STAT_NAMES[index]}
                   </p>
-                  <p>{pokemon.stats[index].base_stat}</p>
+                  <p>{pokemon.stats[key]}</p>
                 </div>
-                <progress
-                  value={pokemon.stats[index].base_stat}
-                  max="255"
-                ></progress>
+                <progress value={pokemon.stats[key]} max="255"></progress>
               </li>
             </>
           ))}

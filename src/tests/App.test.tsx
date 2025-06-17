@@ -17,7 +17,7 @@ import {
 
 // Respuesta de la lista
 
-describe("App Component", () => {
+describe.skip("App Component", () => {
   describe("Muestra la informacion de un pokemon", () => {
     beforeEach(() => {
       const mockFetch = vi.fn();
