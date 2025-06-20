@@ -17,7 +17,7 @@ import {
 
 // Respuesta de la lista
 
-describe.skip("App Component", () => {
+describe("App Component", () => {
   describe("Muestra la informacion de un pokemon", () => {
     beforeEach(() => {
       const mockFetch = vi.fn();
@@ -450,4 +450,8 @@ describe.skip("App Component", () => {
       expect(card.length).toBe(6);
     });
   });
+
+  // describe("Añadir pokemon a favoritos", () => {
+  //   test("debe mostrar la estrella para añadir a favoritos", () => {});
+  // });
 });

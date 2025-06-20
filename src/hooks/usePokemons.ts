@@ -46,13 +46,12 @@ export const usePokemons = () => {
   const sortByProperty = (property: string) => {
     setFilteredPokemons((previous) =>
       [...previous].sort((pokemon1, pokemon2) => {
-        const pokemon1Stat = pokemon1.stats.find(
-          (stat) => stat.stat.name === property,
-        );
-        const pokemon2Stat = pokemon2.stats.find(
-          (stat) => stat.stat.name === property,
-        );
-        return pokemon2Stat.base_stat - pokemon1Stat.base_stat;
+        if(property === 'special-attack'){
+          return pokemon2.stats["specialAttack"] - pokemon1.stats["specialAttack"];
+        } else if(property === 'special-defense'){
+          return pokemon2.stats["specialDefense"] - pokemon1.stats["specialDefense"];
+        }
+        return pokemon2.stats[property] - pokemon1.stats[property];
       }),
     );
   };
@@ -75,7 +74,7 @@ export const usePokemons = () => {
 
   const findByType = (pokemon) => {
     return pokemon.types.find((type) =>
-      type.type.name.startsWith(search.toLowerCase()),
+      type.startsWith(search.toLowerCase()),
     );
   };
 
