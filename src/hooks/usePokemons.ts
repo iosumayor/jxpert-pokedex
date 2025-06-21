@@ -24,29 +24,40 @@ export const usePokemons = () => {
     return regionRanges.kanto;
   };
 
-  const getPokemons = (region: Region) => {
+  const getPokemons = async (region: Region) => {
     const { start, end } = getCurrentRegion(region);
-    const newPokemonService = new PokemonService(ApiPokemonRepository, LocalStoragePokemonRepository);
-    const pokemons = newPokemonService.getPokemonData(start, end);
-    setFavouritePokemons(newPokemonService.listFavouritePokemons())
-    return pokemons;
+    const pokemonService = new PokemonService(
+      ApiPokemonRepository,
+      LocalStoragePokemonRepository,
+    );
+    const regionPokemons = await pokemonService.getPokemonData(start, end);
+    const favPokemons = await pokemonService.listFavouritePokemons();
+    return { region: regionPokemons, favourites: favPokemons };
   };
 
   const addFavourite = (pokemon: Pokemon) => {
-    const newPokemonService = new PokemonService(ApiPokemonRepository, LocalStoragePokemonRepository);
-    newPokemonService.addFavourite(pokemon)
-    const copiedFavouritePokemons = [...favouritePokemons]
-    copiedFavouritePokemons.push(pokemon)
-    setFavouritePokemons(copiedFavouritePokemons)
-  }
+    const newPokemonService = new PokemonService(
+      ApiPokemonRepository,
+      LocalStoragePokemonRepository,
+    );
+    newPokemonService.addFavourite(pokemon);
+    const copiedFavouritePokemons = [...favouritePokemons];
+    copiedFavouritePokemons.push(pokemon);
+    setFavouritePokemons(copiedFavouritePokemons);
+  };
 
   const deleteFavourite = (pokemon: Pokemon) => {
-    const newPokemonService = new PokemonService(ApiPokemonRepository, LocalStoragePokemonRepository);
-    newPokemonService.deleteFavourite(pokemon)
-    const copiedFavouritePokemons = [...favouritePokemons]
-    const index = copiedFavouritePokemons.findIndex(pokemonFav => pokemonFav.id === pokemon.id)
-    setFavouritePokemons(copiedFavouritePokemons.splice(index, 1))
-  }
+    const newPokemonService = new PokemonService(
+      ApiPokemonRepository,
+      LocalStoragePokemonRepository,
+    );
+    newPokemonService.deleteFavourite(pokemon);
+    const copiedFavouritePokemons = [...favouritePokemons];
+    const index = copiedFavouritePokemons.findIndex(
+      (pokemonFav) => pokemonFav.id === pokemon.id,
+    );
+    setFavouritePokemons(copiedFavouritePokemons.splice(index, 1));
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,8 +66,9 @@ export const usePokemons = () => {
 
       const pokemonsData = await getPokemons(region);
 
-      setPokemons(pokemonsData);
-      setFilteredPokemons(pokemonsData);
+      setPokemons(pokemonsData.region);
+      setFilteredPokemons(pokemonsData.region);
+      setFavouritePokemons(pokemonsData.favourites);
       setLoading(false);
     };
 
@@ -66,10 +78,14 @@ export const usePokemons = () => {
   const sortByProperty = (property: string) => {
     setFilteredPokemons((previous) =>
       [...previous].sort((pokemon1, pokemon2) => {
-        if(property === 'special-attack'){
-          return pokemon2.stats["specialAttack"] - pokemon1.stats["specialAttack"];
-        } else if(property === 'special-defense'){
-          return pokemon2.stats["specialDefense"] - pokemon1.stats["specialDefense"];
+        if (property === "special-attack") {
+          return (
+            pokemon2.stats["specialAttack"] - pokemon1.stats["specialAttack"]
+          );
+        } else if (property === "special-defense") {
+          return (
+            pokemon2.stats["specialDefense"] - pokemon1.stats["specialDefense"]
+          );
         }
         return pokemon2.stats[property] - pokemon1.stats[property];
       }),
@@ -93,9 +109,7 @@ export const usePokemons = () => {
   };
 
   const findByType = (pokemon) => {
-    return pokemon.types.find((type) =>
-      type.startsWith(search.toLowerCase()),
-    );
+    return pokemon.types.find((type) => type.startsWith(search.toLowerCase()));
   };
 
   useEffect(() => {
@@ -122,6 +136,6 @@ export const usePokemons = () => {
     search,
     favouritePokemons,
     addFavourite,
-    deleteFavourite
+    deleteFavourite,
   };
 };
