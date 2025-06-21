@@ -139,17 +139,15 @@ export const Card = ({
         <h3 className="card__title">{pokemon.name}</h3>
         <ul aria-description="Stats resume">
           {Object.keys(pokemon.stats).map((key, index) => (
-            <>
-              <li className="card__stat" aria-label="Health points">
-                <div className="stat__value">
-                  <p className="stat__name" aria-hidden="true">
-                    {STAT_NAMES[index]}
-                  </p>
-                  <p>{pokemon.stats[key]}</p>
-                </div>
-                <progress value={pokemon.stats[key]} max="255"></progress>
-              </li>
-            </>
+            <li className="card__stat" aria-label="Health points" key={index}>
+              <div className="stat__value">
+                <p className="stat__name" aria-hidden="true">
+                  {STAT_NAMES[index]}
+                </p>
+                <p>{pokemon.stats[key]}</p>
+              </div>
+              <progress value={pokemon.stats[key]} max="255"></progress>
+            </li>
           ))}
         </ul>
       </section>
