@@ -3,10 +3,13 @@ import { useEffect, useState } from "react";
 import { SORT_DEFAULT, Stats } from "../constants/sortProperties";
 import { PokemonService } from "../core/services/pokemonService";
 import { ApiPokemonRepository } from "../core/infrastructure/ApiPokemonRepository";
+import { LocalStoragePokemonRepository } from "../core/infrastructure/LocalStorageFavouritePokemonRepository";
+import { Pokemon } from "../core/domain/Pokemon";
 
 export const usePokemons = () => {
   const [search, setSearch] = useState<string>("");
   const [pokemons, setPokemons] = useState<any>([]);
+  const [favouritePokemons, setFavouritePokemons] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
   const [filteredPokemons, setFilteredPokemons] = useState<any>([]);
@@ -21,12 +24,29 @@ export const usePokemons = () => {
     return regionRanges.kanto;
   };
 
-  const getPokemons = async (region: Region) => {
+  const getPokemons = (region: Region) => {
     const { start, end } = getCurrentRegion(region);
-    const newPokemonService = new PokemonService(ApiPokemonRepository);
+    const newPokemonService = new PokemonService(ApiPokemonRepository, LocalStoragePokemonRepository);
     const pokemons = newPokemonService.getPokemonData(start, end);
+    setFavouritePokemons(newPokemonService.listFavouritePokemons())
     return pokemons;
   };
+
+  const addFavourite = (pokemon: Pokemon) => {
+    const newPokemonService = new PokemonService(ApiPokemonRepository, LocalStoragePokemonRepository);
+    newPokemonService.addFavourite(pokemon)
+    const copiedFavouritePokemons = [...favouritePokemons]
+    copiedFavouritePokemons.push(pokemon)
+    setFavouritePokemons(copiedFavouritePokemons)
+  }
+
+  const deleteFavourite = (pokemon: Pokemon) => {
+    const newPokemonService = new PokemonService(ApiPokemonRepository, LocalStoragePokemonRepository);
+    newPokemonService.deleteFavourite(pokemon)
+    const copiedFavouritePokemons = [...favouritePokemons]
+    const index = copiedFavouritePokemons.findIndex(pokemonFav => pokemonFav.id === pokemon.id)
+    setFavouritePokemons(copiedFavouritePokemons.splice(index, 1))
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,5 +120,8 @@ export const usePokemons = () => {
     sort,
     setSearch,
     search,
+    favouritePokemons,
+    addFavourite,
+    deleteFavourite
   };
 };

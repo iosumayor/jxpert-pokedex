@@ -17,7 +17,7 @@ import rock from "../assets/rock.svg";
 import steel from "../assets/steel.svg";
 import water from "../assets/water.svg";
 import starFilled from "../assets/star-filled.svg";
-import starHover from "../assets/star-hover.svg";
+// import starHover from "../assets/star-hover.svg";
 import starEmpty from "../assets/star-empty.svg";
 import { Pokemon } from "../core/domain/Pokemon";
 import { useState } from "react";
@@ -50,18 +50,33 @@ const STAT_NAMES = ["Hp", "At", "Df", "SpA", "SpD", "Spd"] as const;
 
 // type Stat = (typeof STAT_NAMES)[number]
 
-export const Card = ({ pokemon }: { pokemon: Pokemon }) => {
+export const Card = ({
+  pokemon,
+  favouritePokemons,
+  addFavourite,
+  deleteFavourite,
+}: {
+  pokemon: Pokemon;
+  favouritePokemons: Pokemon[];
+  addFavourite: (pokemon: Pokemon) => void;
+  deleteFavourite: (pokemon: Pokemon) => void;
+}) => {
   const customStyles: any = {
     "--color-type": `var(--color-${pokemon.types[0]}`,
   };
 
-  const [isFavourite, setIsFavourite] = useState(false);
+  const index = favouritePokemons.findIndex(
+    (pokemonFav) => pokemonFav.id === pokemon.id,
+  );
+  const [isFavourite, setIsFavourite] = useState(index >= 0);
 
   const handleClick = () => {
     if (isFavourite) {
       setIsFavourite(false);
+      deleteFavourite(pokemon);
     } else {
       setIsFavourite(true);
+      addFavourite(pokemon);
     }
   };
 

@@ -18,6 +18,9 @@ export const App = () => {
     sort,
     setSearch,
     search,
+    favouritePokemons,
+    addFavourite,
+    deleteFavourite,
   } = usePokemons();
 
   return (
@@ -67,7 +70,12 @@ export const App = () => {
               {filteredPokemons.map((res) => {
                 return (
                   <li key={`pokemon-card-${res.id}`}>
-                    <Card pokemon={res} />
+                    <Card
+                      pokemon={res}
+                      favouritePokemons={favouritePokemons}
+                      addFavourite={addFavourite}
+                      deleteFavourite={deleteFavourite}
+                    />
                   </li>
                 );
               })}

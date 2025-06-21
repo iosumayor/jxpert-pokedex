@@ -29,7 +29,7 @@ export const LocalStoragePokemonRepository: FavouritePokemonRepository = {
         }
         const favouritePokemonsParsed: Pokemon[] = JSON.parse(favouritePokemons);
         if(favouritePokemonsParsed?.some((pok) => pok.id === pokemon.id)){
-            const index = favouritePokemonsParsed.indexOf(pokemon)
+            const index = favouritePokemonsParsed.findIndex(pokemonFav => pokemon.id === pokemonFav.id)
             if (index > -1) { 
                 favouritePokemonsParsed.splice(index, 1); 
             }
@@ -37,3 +37,5 @@ export const LocalStoragePokemonRepository: FavouritePokemonRepository = {
         }
     }
 }
+
+
