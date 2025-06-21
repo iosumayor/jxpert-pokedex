@@ -4,6 +4,7 @@ export interface Pokemon {
   stats: Stats;
   types: Type[];
   image: string;
+  favourite: boolean;
 }
 
 interface Stats {
