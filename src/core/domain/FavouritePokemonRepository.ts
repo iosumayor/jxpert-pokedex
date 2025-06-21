@@ -1,7 +1,7 @@
 import { Pokemon } from "./Pokemon";
 
 export interface FavouritePokemonRepository {
-  listFavourites: () => Pokemon[];
+  listFavourites: () => Promise<Pokemon[]>;
   addFavourite: (pokemon: Pokemon) => void;
   deleteFavourite: (pokemon: Pokemon) => void;
 }
