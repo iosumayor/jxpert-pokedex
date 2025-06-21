@@ -451,7 +451,36 @@ describe("App Component", () => {
     });
   });
 
-  // describe("Añadir pokemon a favoritos", () => {
-  //   test("debe mostrar la estrella para añadir a favoritos", () => {});
-  // });
+  describe("Añadir pokemon a favoritos", () => {
+    beforeEach(() => {
+      const mockFetch = vi.fn();
+      globalThis.fetch = mockFetch;
+
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockOnePokemonListResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockPokemonDetailBulbasaurResponse,
+        });
+    });
+    test("debe mostrar la estrella para añadir a favoritos", async () => {
+      render(<App />);
+
+      const star = await screen.findByTestId("favourite");
+      expect(star).toBeInTheDocument();
+    });
+
+    test("debe cambiar el icono de estrella al clicarlo", async () => {
+      render(<App />);
+
+      const star = await screen.findByTestId("favourite");
+      console.log(screen.debug());
+      await userEvent.click(star);
+      const starFavourite = screen.getByTestId("favourite-filled");
+      expect(starFavourite).toBeInTheDocument();
+    });
+  });
 });

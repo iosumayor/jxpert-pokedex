@@ -16,7 +16,11 @@ import psychic from "../assets/psychic.svg";
 import rock from "../assets/rock.svg";
 import steel from "../assets/steel.svg";
 import water from "../assets/water.svg";
+import starFilled from "../assets/star-filled.svg";
+import starHover from "../assets/star-hover.svg";
+import starEmpty from "../assets/star-empty.svg";
 import { Pokemon } from "../core/domain/Pokemon";
+import { useState } from "react";
 
 type Icons = {
   [key: string]: string;
@@ -51,6 +55,16 @@ export const Card = ({ pokemon }: { pokemon: Pokemon }) => {
     "--color-type": `var(--color-${pokemon.types[0]}`,
   };
 
+  const [isFavourite, setIsFavourite] = useState(false);
+
+  const handleClick = () => {
+    if (isFavourite) {
+      setIsFavourite(false);
+    } else {
+      setIsFavourite(true);
+    }
+  };
+
   return (
     <article className="card" style={customStyles}>
       <header className="card__head">
@@ -78,7 +92,35 @@ export const Card = ({ pokemon }: { pokemon: Pokemon }) => {
         loading="lazy"
         alt={`${pokemon.name} artwork`}
       />
+
       <section className="card__content">
+        <button
+          onClick={() => handleClick()}
+          style={{
+            border: "none",
+            padding: "1rem",
+            background: "#00000030",
+            borderRadius: "50%",
+            position: "absolute",
+            right: 0,
+            top: 0,
+          }}
+        >
+          {isFavourite ? (
+            <img
+              className="icon_star"
+              src={starFilled}
+              data-testid="favourite-filled"
+            />
+          ) : (
+            <img
+              className="icon_star"
+              src={starEmpty}
+              data-testid="favourite"
+            />
+          )}
+        </button>
+
         <h3 className="card__title">{pokemon.name}</h3>
         <ul aria-description="Stats resume">
           {Object.keys(pokemon.stats).map((key, index) => (
