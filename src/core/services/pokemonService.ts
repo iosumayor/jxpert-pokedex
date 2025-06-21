@@ -1,4 +1,5 @@
 import { PokemonRepository } from "../domain/PokemonRepository";
+// import { FavouritePokemonRepository } from "../domain/FavouritePokemonRepository";
 
 interface Pokemon {
   name: string;
@@ -9,8 +10,10 @@ export type PokemonList = Pokemon[];
 
 export class PokemonService {
   constructor(private pokemonsRepository: PokemonRepository) {}
+
   getPokemonData(start: number, end: number) {
     const allPokemons = this.pokemonsRepository.listByRegion(start, end);
     return allPokemons;
   }
+
 }

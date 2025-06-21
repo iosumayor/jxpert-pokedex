@@ -477,7 +477,6 @@ describe("App Component", () => {
       render(<App />);
 
       const star = await screen.findByTestId("favourite");
-      console.log(screen.debug());
       await userEvent.click(star);
       const starFavourite = screen.getByTestId("favourite-filled");
       expect(starFavourite).toBeInTheDocument();
