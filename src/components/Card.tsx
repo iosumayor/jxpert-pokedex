@@ -113,7 +113,7 @@ export const Card = ({
           <img
             className="star"
             src={isFavourite ? starFilled : starEmpty}
-            data-testid="favourite-filled"
+            data-testid={isFavourite ? "favourite-filled" : "favourite"}
           />
         </button>
 
