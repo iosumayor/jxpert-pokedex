@@ -1,4 +1,4 @@
-import { Region, REGIONS, regionRanges } from "../constants/region";
+import { Region } from "../constants/region";
 import { useEffect, useState } from "react";
 import { SORT_DEFAULT, Stats } from "../constants/sortProperties";
 import { PokemonService } from "../core/services/pokemonService";
@@ -16,21 +16,13 @@ export const usePokemons = () => {
   const [region, setRegion] = useState<Region>("kanto");
   const [sort, setSort] = useState<Stats>("default");
 
-  const getCurrentRegion = (region: Region) => {
-    if (REGIONS.includes(region)) {
-      return regionRanges[region];
-    }
-
-    return regionRanges.kanto;
-  };
-
   const getPokemons = async (region: Region) => {
-    const { start, end } = getCurrentRegion(region);
+    // const { start, end } = getCurrentRegion(region);
     const pokemonService = new PokemonService(
       ApiPokemonRepository,
       LocalStoragePokemonRepository,
     );
-    const regionPokemons = await pokemonService.getPokemonData(start, end);
+    const regionPokemons = await pokemonService.getPokemonData(region);
     const favPokemons = await pokemonService.listFavouritePokemons();
     return { region: regionPokemons, favourites: favPokemons };
   };

@@ -14,23 +14,22 @@ interface Stats {
   specialDefense: number;
   speed: number;
 }
-interface Type {
-  bug;
-  dark;
-  dragon;
-  electric;
-  fairy;
-  fighting;
-  fire;
-  flying;
-  ghost;
-  grass;
-  ground;
-  ice;
-  normal;
-  poison;
-  psychic;
-  rock;
-  steel;
-  water;
-}
+export type Type =
+  | "bug"
+  | "dark"
+  | "dragon"
+  | "electric"
+  | "fairy"
+  | "fighting"
+  | "fire"
+  | "flying"
+  | "ghost"
+  | "grass"
+  | "ground"
+  | "ice"
+  | "normal"
+  | "poison"
+  | "psychic"
+  | "rock"
+  | "steel"
+  | "water";

@@ -1,8 +1,10 @@
 import { PokemonRepository } from "../domain/PokemonRepository";
+import { Region } from "../domain/Region";
+import { regionRanges } from "../../constants/region";
 
 export const ApiPokemonRepository: PokemonRepository = {
-  listByRegion: async (start: number, end: number) => {
-    const { results }: any = await getAllPokemons(start, end);
+  listByRegion: async (region: Region) => {
+    const { results }: any = await getAllPokemons(region);
     const pokemonsData = await getPokemonDetail(results);
     const mappedPokemon = pokemonsData.map((pokemonsData) => {
       const types = pokemonsData.types.map((type) => {
@@ -27,9 +29,10 @@ export const ApiPokemonRepository: PokemonRepository = {
   },
 };
 
-const getAllPokemons = async (start: number, end: number) => {
+const getAllPokemons = async (region: Region) => {
+  const limits = getLimitsByRegion(region);
   const res = await fetch(
-    `https://pokeapi.co/api/v2/pokemon?offset=${start}&limit=${end}`,
+    `https://pokeapi.co/api/v2/pokemon?offset=${limits.start}&limit=${limits.end}`,
   ).then((apiPokemonList) => apiPokemonList.json());
 
   if (res === undefined) {
@@ -51,4 +54,8 @@ const getPokemonDetail = async (allPokemons) => {
   }
 
   return res;
+};
+
+const getLimitsByRegion = (region) => {
+  return regionRanges[region];
 };

@@ -88,13 +88,13 @@ export const Card = ({
         </div>
         <div className="card__tag">
           <img
-            src={icons[pokemon.types[0].bug]}
+            src={icons[pokemon.types[0]]}
             className="card__type"
             alt={`${pokemon.types[0]} primary type`}
           />
           {pokemon.types[1] && (
             <img
-              src={icons[pokemon.types[1].fighting]}
+              src={icons[pokemon.types[1]]}
               className="card__type"
               alt={`${pokemon.types[1]} secondary type`}
             />
@@ -109,31 +109,12 @@ export const Card = ({
       />
 
       <section className="card__content">
-        <button
-          onClick={() => handleClick()}
-          style={{
-            border: "none",
-            padding: "1rem",
-            background: "#00000030",
-            borderRadius: "50%",
-            position: "absolute",
-            right: 0,
-            top: 0,
-          }}
-        >
-          {isFavourite ? (
-            <img
-              className="icon_star"
-              src={starFilled}
-              data-testid="favourite-filled"
-            />
-          ) : (
-            <img
-              className="icon_star"
-              src={starEmpty}
-              data-testid="favourite"
-            />
-          )}
+        <button className="star_wrapper" onClick={() => handleClick()}>
+          <img
+            className="star"
+            src={isFavourite ? starFilled : starEmpty}
+            data-testid="favourite-filled"
+          />
         </button>
 
         <h3 className="card__title">{pokemon.name}</h3>

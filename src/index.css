@@ -498,6 +498,30 @@ custom-progress::-ms-fill {
   opacity: 0.5;
 }
 
+.star_wrapper{
+  border: none;
+  padding: 1rem;
+  background: transparent;
+  border-radius: 50%;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.star_wrapper:hover {
+  background: #00000030;
+}
+
+.star {
+  height: 16px;
+  width: 16px;
+}
+
 /* ---------- */
 /* Card - end */
 /* ---------- */
